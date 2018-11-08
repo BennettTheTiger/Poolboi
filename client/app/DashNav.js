@@ -3,12 +3,13 @@
 
 const DashNav = (props) =>{
     return(
-        <div>
+        <div className="dashNavContainer">
             <div className="navItem"><span onClick={() => props.newContent(<MainView/>)}>Overview</span></div>
             <div className="navItem"><span onClick={() => props.newContent(<WaterView/>)}>Water</span></div>
             <div className="navItem"><span onClick={() => props.newContent(<AccountView/>)}>Account</span></div>
             <div className="navItem"><a href="/about">About</a></div>
-            <div className="navItem">Log Out</div>
+            <div className="navItem"><a href="/logout">Log Out</a></div>
+            <hr/>
         </div>
     );
 }

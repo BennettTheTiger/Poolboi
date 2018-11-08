@@ -3,7 +3,7 @@
 var DashNav = function DashNav(props) {
     return React.createElement(
         "div",
-        null,
+        { className: "dashNavContainer" },
         React.createElement(
             "div",
             { className: "navItem" },
@@ -45,7 +45,17 @@ var DashNav = function DashNav(props) {
                 { href: "/about" },
                 "About"
             )
-        )
+        ),
+        React.createElement(
+            "div",
+            { className: "navItem" },
+            React.createElement(
+                "a",
+                { href: "/logout" },
+                "Log Out"
+            )
+        ),
+        React.createElement("hr", null)
     );
 };
 /*

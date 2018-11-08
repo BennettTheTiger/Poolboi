@@ -24,7 +24,12 @@ var handleSignUp = function handleSignUp(e) {
 var LoginWindow = function LoginWindow(props) {
     return React.createElement(
         'div',
-        null,
+        { className: 'loginWrapper' },
+        React.createElement(
+            'a',
+            { href: '/about' },
+            'About'
+        ),
         React.createElement(
             'form',
             { id: 'loginForm',
@@ -48,11 +53,6 @@ var LoginWindow = function LoginWindow(props) {
             React.createElement('input', { id: 'pass', type: 'password', name: 'pass', placeholder: 'password' }),
             React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
             React.createElement('input', { type: 'submit', className: 'formSubmit', value: 'Sign in' })
-        ),
-        React.createElement(
-            'a',
-            { href: '/about' },
-            'About'
         ),
         React.createElement('input', { type: 'submit', onClick: function onClick() {
                 createSignupWindow(props.csrf);

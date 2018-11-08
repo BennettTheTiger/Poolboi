@@ -25,7 +25,8 @@ const handleSignUp = (e) =>{
 
 const LoginWindow = (props) => {
     return (
-        <div>
+        <div className="loginWrapper">
+        <a href="/about">About</a>
         <form id="loginForm"
             name="loginForm"
             onSubmit = {handleLogin}
@@ -43,7 +44,7 @@ const LoginWindow = (props) => {
             <input type="submit" className="formSubmit" value="Sign in"></input>
 
         </form>
-        <a href="/about">About</a>
+        
         <input type="submit" onClick={()=>{createSignupWindow((props.csrf))}} value="Sign Up"></input>
         <span onClick={()=>{createSignupWindow((props.csrf))}}><h4>I'm new here, Sign Me Up!</h4></span>
         </div>
