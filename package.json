@@ -12,6 +12,8 @@
     "pretest": "eslint ./server --fix",
     "buildLoginBundle": "babel ./client/login/ ./client/helper --presets react --out-file ./hosted/loginbundle.js",
     "buildAppBundle": "babel ./client/app/ ./client/helper --presets react --out-file ./hosted/dashboard.js",
+    "buildWaterBundle" : "babel ./client/app/forms/addWater.js ./client/app/forms/waterSlider.js ./client/helper --presets react --out-file ./hosted/waterbundle.js",
+    "buildBodyBundle" : "babel ./client/app/forms/addBody.js ./client/helper --presets react --out-file ./hosted/newbodybundle.js",
     "nodemon": "nodemon --watch ./server ./server/app.js",
     "start": "node ./server/app.js"
   },
@@ -36,6 +38,7 @@
     "express-session": "^1.15.6",
     "helmet": "^1.3.0",
     "mongoose": "^5.3.8",
+    "openweather-apis": "^3.3.5",
     "serve-favicon": "^2.3.0",
     "underscore": "^1.8.3"
   },

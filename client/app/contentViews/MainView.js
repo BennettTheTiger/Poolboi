@@ -2,7 +2,7 @@
 const MainView = () =>
 {
     return(
-        <div>Here is your overview content</div>
+        <div>Here is your overview </div>
     );
 }
 

@@ -4,31 +4,35 @@ class Dashboard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: 'Username',
-            mainContent: <AccountView/>,
+            userData: {username:'UserName'},//placeholder replaced on page load
+            mainContent: <MainView/>,
         };
+
         this.changeContent = this.changeContent.bind(this);
 
       }
-
+      componentDidMount(){
+        //load account info
+        sendAjax('GET','/accountInfo',null,(data) => {
+          this.setState({userData: data});
+        });
+      }
       changeContent(newElement){
         this.setState({mainContent: newElement});
       };
 
 
       render() {
-
-        
-
         return (
-          <div>
-            <h1>Hello {this.state.name}</h1>
-            <DashNav csrf='test' newContent={this.changeContent}/>
+          <div className="container-fluid">
+            <DashNav csrf='test' account={this.state.userData} newContent={this.changeContent}/>
             {this.state.mainContent}
           </div>
         );
       }
 }
+
+
 
 const init = () => {    
     ReactDOM.render(

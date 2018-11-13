@@ -3,12 +3,13 @@
 
 const DashNav = (props) =>{
     return(
-        <div className="dashNavContainer">
-            <div className="navItem"><span onClick={() => props.newContent(<MainView/>)}>Overview</span></div>
-            <div className="navItem"><span onClick={() => props.newContent(<WaterView/>)}>Water</span></div>
-            <div className="navItem"><span onClick={() => props.newContent(<AccountView/>)}>Account</span></div>
-            <div className="navItem"><a href="/about">About</a></div>
-            <div className="navItem"><a href="/logout">Log Out</a></div>
+        <div className="dashNavContainer nav justify-content-center flex-column flex-sm-row">
+            <div className="nav-item nav-link">Hello {props.account.username}</div>
+            <div className="nav-item nav-link"><span onClick={() => props.newContent(<MainView/>)}>Overview</span></div>
+            <div className="nav-item nav-link"><span onClick={() => props.newContent(<WaterView/>)}>Water</span></div>
+            <div className="nav-item nav-link"><span onClick={() => props.newContent(<AccountView account={props.account}/>)}>Account</span></div>
+            <div className="nav-item nav-link"><a href="/about">About</a></div>
+            <div className="nav-item nav-link"><a href="/logout">Log Out</a></div>
             <hr/>
         </div>
     );

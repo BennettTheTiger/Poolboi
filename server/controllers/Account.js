@@ -100,6 +100,8 @@ const signup = (request, response) => {
   });
 };
 
+const getBasic = (request, response) => response.status(200).json(request.session.account);
+
 const getToken = (request, response) => {
   const req = request;
   const res = response;
@@ -116,3 +118,4 @@ module.exports.login = login;
 module.exports.logout = logout;
 module.exports.signup = signup;
 module.exports.getToken = getToken;
+module.exports.getBasic = getBasic;

@@ -47,6 +47,10 @@ const AccountSchema = new mongoose.Schema({
 AccountSchema.statics.toAPI = doc => ({
   // _id is built into your mongo document and is guaranteed to be unique
   username: doc.username,
+  createdDate: doc.createdDate,
+  zip: doc.zip,
+  firstName: doc.firstName,
+  lastName: doc.lastName,
   _id: doc._id,
 });
 
