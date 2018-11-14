@@ -1,9 +1,17 @@
 // Data Model for a body of water such as pool or spa
 
 const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 
+let WaterBodyModel = {};
+const convertId = mongoose.Types.ObjectId;
 
 const WaterBodySchema = new mongoose.Schema({
+  owner: {
+    type: mongoose.Schema.ObjectId,
+    required: true,
+    ref: 'Account',
+  },
   gallons: {
     type: Number,
     min: 1,
@@ -42,8 +50,26 @@ const WaterBodySchema = new mongoose.Schema({
     max: 100000,
     trim: true,
   },
-
-
 });
 
+WaterBodySchema.statics.findByOwner = (ownerId, callback) => {
+  const search = {
+    owner: convertId(ownerId),
+  };
+
+  return WaterBodyModel.find(search).select('name age felonies').exec(callback);
+};
+
+// Delete a Domo by its id
+WaterBodySchema.statics.removeBody = (domoId, callback) => {
+  const id = {
+    _id: convertId(domoId),
+  };
+  return WaterBodyModel.deleteOne(id).exec(callback);
+};
+
+
+WaterBodyModel = mongoose.model('WaterBody', WaterBodySchema);
+
+module.exports.WaterBodyModel = WaterBodyModel;
 module.exports.WaterBodySchema = WaterBodySchema;

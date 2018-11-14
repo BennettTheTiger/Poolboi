@@ -156,7 +156,9 @@ var AddBody = function (_React$Component) {
             clientData.name = $('#waterName').val();
             clientData.zip = $('#zipCode').val();
             clientData.notes = $('#bodyNotes').val();
-            clientData.hasSun = $('#sun').is(':checked');
+            clientData.inSun = $('#sun').is(':checked');
+            clientData.owner = this.props.user._id;
+            clientData._csrf = this.props.csrf;
             //validate data
             if (clientData.name == "") {
                 window.alert('Please give your ' + this.state.water + ' a name.');
@@ -171,14 +173,9 @@ var AddBody = function (_React$Component) {
             }
             clientData.gallons = fluidData.volume;
             clientData.area = fluidData.area;
-
-            console.dir(clientData);
-
-            /*
-            sendAjax('POST',$('#domoForm').attr("action"),$('#domoForm').serialize(), function(){ 
-                loadDomosFromServer()
-            });
-            */
+            console.log(JSON.stringify(clientData));
+            //make the ajax post    
+            sendAjax('POST', '/addWaterBody', JSON.stringify(clientData), function () {});
         }
     }, {
         key: "render",
@@ -316,12 +313,13 @@ var getAccount = function getAccount(token) {
         createPage(token, result);
     });
 };
+
 var getToken = function getToken() {
     sendAjax('GET', '/getToken', null, function (result) {
         getAccount(result.csrfToken);
     });
 };
-
+//get token > get account > pass as props in createPage
 window.onload = getToken;
 "use strict";
 

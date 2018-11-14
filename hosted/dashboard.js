@@ -16,7 +16,7 @@ var DashNav = function DashNav(props) {
             React.createElement(
                 "span",
                 { onClick: function onClick() {
-                        return props.newContent(React.createElement(MainView, null));
+                        return props.newContent(React.createElement(MainView, { weather: props.weather }));
                     } },
                 "Overview"
             )
@@ -180,7 +180,7 @@ var Dashboard = function (_React$Component) {
 
     _this.state = {
       userData: { username: 'UserName' }, //placeholder replaced on page load
-      mainContent: React.createElement(MainView, null)
+      mainContent: React.createElement(MainView, { weather: props.weather })
     };
 
     _this.changeContent = _this.changeContent.bind(_this);
@@ -189,8 +189,8 @@ var Dashboard = function (_React$Component) {
   }
 
   _createClass(Dashboard, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
+    key: 'componentWillMount',
+    value: function componentWillMount() {
       var _this2 = this;
 
       //load account info
@@ -209,8 +209,12 @@ var Dashboard = function (_React$Component) {
       return React.createElement(
         'div',
         { className: 'container-fluid' },
-        React.createElement(DashNav, { csrf: 'test', account: this.state.userData, newContent: this.changeContent }),
-        this.state.mainContent
+        React.createElement(DashNav, { account: this.state.userData, weather: this.props.weather, newContent: this.changeContent }),
+        React.createElement(
+          'section',
+          null,
+          this.state.mainContent
+        )
       );
     }
   }]);
@@ -218,23 +222,36 @@ var Dashboard = function (_React$Component) {
   return Dashboard;
 }(React.Component);
 
-var init = function init() {
-  ReactDOM.render(React.createElement(Dashboard, null), document.getElementById('dashboard'));
+var init = function init(data) {
+  ReactDOM.render(React.createElement(Dashboard, { weather: data }), document.getElementById('dashboard'));
 };
 
-window.onload = init;
-'use strict';
+window.onload = function () {
+  sendAjax('GET', '/weather', null, function (result) {
+    console.dir(result);
+    init(result);
+  });
+};
+"use strict";
 
-var MainView = function MainView() {
+var MainView = function MainView(props) {
+    console.dir(props);
     return React.createElement(
-        'div',
+        "div",
         null,
-        'Here is your overview '
+        React.createElement(
+            "p",
+            null,
+            "The current temperature is ",
+            props.weather.currently.temperature
+        ),
+        React.createElement(
+            "p",
+            null,
+            "Feels like ",
+            props.weather.currently.apparentTemperature
+        )
     );
-};
-
-var CreateMainView = function CreateMainView() {
-    ReactDOM.render(React.createElement(MainView, null), document.querySelector('#dashboardContent'));
 };
 "use strict";
 
@@ -247,7 +264,10 @@ var PlusIcon = function PlusIcon(props) {
 };
 "use strict";
 
-var WaterBodyView = function WaterBodyView() {
+var WaterBodyView = function WaterBodyView(props) {
+    var delteBody = function delteBody() {
+        window.confirm('Are you sure you want to delete nameHere \n It will also delete all water samples for nameHere');
+    };
     return React.createElement(
         "div",
         { className: "col-sm-4" },
@@ -284,12 +304,7 @@ var WaterBodyView = function WaterBodyView() {
         React.createElement("hr", null),
         React.createElement(
             "button",
-            null,
-            "Edit"
-        ),
-        React.createElement(
-            "button",
-            null,
+            { onClick: delteBody },
             "Delete"
         )
     );

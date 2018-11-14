@@ -104,7 +104,9 @@ class AddBody extends React.Component {
         clientData.name = $('#waterName').val();
         clientData.zip = $('#zipCode').val();
         clientData.notes = $('#bodyNotes').val();
-        clientData.hasSun = $('#sun').is(':checked')
+        clientData.inSun = $('#sun').is(':checked');
+        clientData.owner = this.props.user._id;
+        clientData._csrf = this.props.csrf;
         //validate data
         if(clientData.name == ""){
             window.alert('Please give your ' + this.state.water + ' a name.');
@@ -119,14 +121,12 @@ class AddBody extends React.Component {
         }      
         clientData.gallons = fluidData.volume;
         clientData.area = fluidData.area;
-            
-        console.dir(clientData);
-        
-        /*
-        sendAjax('POST',/addWater,, function(){ 
+        console.log(JSON.stringify(clientData));
+        //make the ajax post    
+        sendAjax('POST','/addWaterBody',JSON.stringify(clientData), function(){ 
             
         });
-        */
+        
     }
 
     render(){

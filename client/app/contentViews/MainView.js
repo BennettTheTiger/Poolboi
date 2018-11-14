@@ -1,14 +1,15 @@
 
-const MainView = () =>
+const MainView = (props) =>
 {
+    console.dir(props);
     return(
-        <div>Here is your overview </div>
+        <div>
+            <p>The current temperature is {props.weather.currently.temperature}</p>
+            <p>Feels like {props.weather.currently.apparentTemperature}</p>
+        </div>
     );
 }
 
 
-const CreateMainView = () =>{
-    ReactDOM.render(
-       <MainView />, document.querySelector('#dashboardContent')
-    );
-}
+
+

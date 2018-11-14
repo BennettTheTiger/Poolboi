@@ -5,17 +5,18 @@ class Dashboard extends React.Component {
         super(props);
         this.state = {
             userData: {username:'UserName'},//placeholder replaced on page load
-            mainContent: <MainView/>,
+            mainContent: <MainView weather={props.weather}/>,
         };
 
         this.changeContent = this.changeContent.bind(this);
 
       }
-      componentDidMount(){
+      componentWillMount(){
         //load account info
         sendAjax('GET','/accountInfo',null,(data) => {
           this.setState({userData: data});
         });
+        
       }
       changeContent(newElement){
         this.setState({mainContent: newElement});
@@ -25,8 +26,8 @@ class Dashboard extends React.Component {
       render() {
         return (
           <div className="container-fluid">
-            <DashNav csrf='test' account={this.state.userData} newContent={this.changeContent}/>
-            {this.state.mainContent}
+            <DashNav account={this.state.userData} weather={this.props.weather} newContent={this.changeContent}/>
+            <section>{this.state.mainContent}</section>
           </div>
         );
       }
@@ -34,10 +35,15 @@ class Dashboard extends React.Component {
 
 
 
-const init = () => {    
+const init = (data) => {    
     ReactDOM.render(
-      <Dashboard/>,document.getElementById('dashboard')
+      <Dashboard weather={data}/>,document.getElementById('dashboard')
     );
   };
   
-  window.onload = init;
+  window.onload = () =>{
+    sendAjax('GET','/weather',null, (result) => {
+      console.dir(result);
+      init(result);
+    });   
+  };

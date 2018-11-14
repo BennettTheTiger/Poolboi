@@ -1,11 +1,21 @@
 // Data Model for a water sample
 
 const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 
+let WaterSampleModel = {};
+const convertId = mongoose.Types.ObjectId;
 
 const WaterSampleSchema = new mongoose.Schema({
   waterBody: {
-
+    type: mongoose.Schema.ObjectId,
+    required: true,
+    ref: 'WaterBody',
+  },
+  accountId: {
+    type: mongoose.Schema.ObjectId,
+    required: true,
+    ref: 'Account',
   },
   date: {
     type: Date,
@@ -55,4 +65,22 @@ const WaterSampleSchema = new mongoose.Schema({
   },
 });
 
+WaterSampleSchema.statics.findByBody = (bodyId, callback) => {
+  const search = {
+    owner: convertId(bodyId),
+  };
+  return WaterSampleModel.find(search).exec(callback);
+};
+
+// Delete a water sample by its id
+WaterSampleSchema.statics.removeSample = (sampleId, callback) => {
+  const id = {
+    _id: convertId(sampleId),
+  };
+  return WaterSampleModel.deleteOne(id).exec(callback);
+};
+
+
+WaterSampleModel = mongoose.model('WaterSample', WaterSampleSchema);
+module.exports.WaterSampleModel = WaterSampleModel;
 module.exports.WaterSampleSchema = WaterSampleSchema;
