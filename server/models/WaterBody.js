@@ -27,6 +27,16 @@ const WaterBodySchema = new mongoose.Schema({
     default: true, // assume its a pool
     required: true,
   },
+  inSun: {
+    type: Boolean,
+    default: true, // assume its in the sun
+  },
+  name: {
+    type: String,
+    max: 100000,
+    trim: true,
+    required: true,
+  },
   notes: {
     type: String,
     max: 100000,

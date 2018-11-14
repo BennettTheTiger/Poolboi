@@ -6,9 +6,7 @@ const WaterView = (props) =>
                 <h2>My Water</h2>
                 <div className="row"> 
                     <WaterBodyView/>
-                    <WaterBodyView/>
-                    <WaterBodyView/>
-                    <PlusIcon size="col-sm-4"/>
+                    <a href="/newWaterBody"><PlusIcon size="col-sm-4"/></a>
                     
                 </div>
             </section>

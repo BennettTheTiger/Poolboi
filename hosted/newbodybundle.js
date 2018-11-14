@@ -17,13 +17,14 @@ var AddBody = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (AddBody.__proto__ || Object.getPrototypeOf(AddBody)).call(this, props));
 
         _this.state = {
-            water: 'pool',
+            water: 'Pool',
             isCirlce: true,
             shape: React.createElement(this.CircleForm, null)
         };
-
+        _this.makeWaterBody = _this.makeWaterBody.bind(_this);
         return _this;
     }
+
     //form for circle shaped water bodies
 
 
@@ -38,13 +39,18 @@ var AddBody = function (_React$Component) {
                     { "for": "diameter" },
                     "Diameter:"
                 ),
-                React.createElement("input", { type: "number", name: "diameter", min: "0", max: "100" }),
+                React.createElement("input", { type: "number", name: "diameter", min: "0", max: "100", id: "diameter" }),
                 React.createElement(
                     "label",
                     { "for": "depth" },
                     "Depth:"
                 ),
-                React.createElement("input", { type: "number", name: "depth", max: "50", min: "0" })
+                React.createElement("input", { type: "number", name: "depth", max: "50", min: "0", id: "depth" }),
+                React.createElement(
+                    "label",
+                    null,
+                    "In feet"
+                )
             );
         }
     }, {
@@ -60,19 +66,19 @@ var AddBody = function (_React$Component) {
                     { "for": "width" },
                     "Width:"
                 ),
-                React.createElement("input", { type: "number", name: "width", min: "0", max: "1000" }),
+                React.createElement("input", { type: "number", name: "width", min: "0", max: "1000", id: "width" }),
                 React.createElement(
                     "label",
                     { "for": "length" },
                     "Length:"
                 ),
-                React.createElement("input", { type: "number", name: "length", max: "50", min: "0" }),
+                React.createElement("input", { type: "number", name: "length", max: "1000", min: "0", id: "length" }),
                 React.createElement(
                     "label",
                     { "for": "depth" },
                     "Avg Depth:"
                 ),
-                React.createElement("input", { type: "number", name: "depth", max: "50", min: "0" })
+                React.createElement("input", { type: "number", name: "depth", max: "100", min: "0", id: "depth" })
             );
         }
     }, {
@@ -90,6 +96,90 @@ var AddBody = function (_React$Component) {
             if (shape === 'circle') this.setState({ shape: React.createElement(this.CircleForm, null) });
             if (shape === 'rect') this.setState({ shape: React.createElement(this.RectForm, null) });
         }
+
+        //calculate area in ft squared and volume gallons for cicle and square pools
+
+    }, {
+        key: "calcArea",
+        value: function calcArea() {
+            if (document.querySelector('#type').value === 'circle') {
+                var rad = $('#diameter').val() / 2;
+                //diameter error out
+                if (rad == "") {
+                    window.alert('Please enter a diameter');
+                    $('#diameter').focus();
+                    return false;
+                }
+                var depth = $('#depth').val();
+                //rad error out
+                if (depth == "") {
+                    window.alert('Please enter a radius');
+                    $('#depth').focus();
+                    return false;
+                }
+                var area = Math.round(Math.PI * (rad * rad));
+                var volume = area * depth;
+                volume = Math.ceil(volume * 7.48052); //convert ft3 to gallons
+                return { area: area, volume: volume };
+            } else {
+                //validate inputs
+                if ($('#width').val() == "") {
+                    window.alert('Please enter a width');
+                    $('#width').focus();
+                    return false;
+                }
+                if ($('#length').val() == "") {
+                    window.alert('Please enter a length');
+                    $('#length').focus();
+                    return false;
+                }
+                if ($('#depth').val() == "") {
+                    window.alert('Please enter a depth');
+                    $('#depth').focus();
+                    return false;
+                }
+                //do calcs
+                var _area = $('#width').val() * $('#length').val();
+                var _volume = Math.round(_area * $('#depth').val());
+                _volume = Math.ceil(_volume * 7.48052); //convert ft3 to gallons
+                console.log('area:' + _area, 'volume:' + _volume);
+                return { area: _area, volume: _volume };
+            }
+        }
+    }, {
+        key: "makeWaterBody",
+        value: function makeWaterBody(e) {
+            e.preventDefault();
+            //get form values as a json object
+            var clientData = {};
+            clientData.isPool = $('#waterType').val();
+            clientData.name = $('#waterName').val();
+            clientData.zip = $('#zipCode').val();
+            clientData.notes = $('#bodyNotes').val();
+            clientData.hasSun = $('#sun').is(':checked');
+            //validate data
+            if (clientData.name == "") {
+                window.alert('Please give your ' + this.state.water + ' a name.');
+                $('#waterName').focus();
+                return;
+            }
+
+            var fluidData = this.calcArea();
+            if (fluidData === false) {
+                window.alert('Please check your ' + this.state.water + 's size values.');
+                return; //if a field was not in fluid data abort submiting 
+            }
+            clientData.gallons = fluidData.volume;
+            clientData.area = fluidData.area;
+
+            console.dir(clientData);
+
+            /*
+            sendAjax('POST',$('#domoForm').attr("action"),$('#domoForm').serialize(), function(){ 
+                loadDomosFromServer()
+            });
+            */
+        }
     }, {
         key: "render",
         value: function render() {
@@ -105,7 +195,13 @@ var AddBody = function (_React$Component) {
                 ),
                 React.createElement(
                     "form",
-                    null,
+                    { id: "waterBody",
+                        onSubmit: this.makeWaterBody,
+                        name: "waterBodyForm",
+                        action: "/newBody",
+                        method: "POST",
+                        className: "waterBodyForm"
+                    },
                     React.createElement(
                         "div",
                         { className: "form-group" },
@@ -116,7 +212,7 @@ var AddBody = function (_React$Component) {
                         ),
                         React.createElement(
                             "select",
-                            { className: "form-control", id: "type", onChange: function onChange(e) {
+                            { className: "form-control", id: "waterType", onChange: function onChange(e) {
                                     return _this2.changeType(e);
                                 } },
                             React.createElement(
@@ -139,7 +235,7 @@ var AddBody = function (_React$Component) {
                             { "for": "waterName" },
                             "Name:"
                         ),
-                        React.createElement("input", { className: "form-control", type: "text", id: "waterName" })
+                        React.createElement("input", { className: "form-control", type: "text", id: "waterName", defaultValue: this.props.user.username + 's-' + this.state.water })
                     ),
                     React.createElement(
                         "div",
@@ -149,7 +245,7 @@ var AddBody = function (_React$Component) {
                             { "for": "zipCode" },
                             "Water zip code:"
                         ),
-                        React.createElement("input", { className: "form-control", type: "number", min: "0", max: "99999", id: "zipCode" })
+                        React.createElement("input", { className: "form-control", type: "number", min: "0", max: "99999", id: "zipCode", defaultValue: this.props.user.zip })
                     ),
                     React.createElement(
                         "div",
@@ -182,22 +278,12 @@ var AddBody = function (_React$Component) {
                         { className: "form-group" },
                         React.createElement(
                             "label",
-                            { "for": "gallons" },
-                            "# of Gallons:"
-                        ),
-                        React.createElement("input", { className: "form-control", type: "number", min: "0", max: "200000", id: "gallons" })
-                    ),
-                    React.createElement(
-                        "div",
-                        { className: "form-group" },
-                        React.createElement(
-                            "label",
                             { "for": "covered" },
                             "Is the the ",
                             this.state.water,
                             " exposed to direct sun?"
                         ),
-                        React.createElement("input", { className: "form-control", id: "notes", type: "checkbox", name: "covered" })
+                        React.createElement("input", { className: "form-control", type: "checkbox", name: "covered", id: "sun", defaultValue: "false" })
                     ),
                     React.createElement(
                         "div",
@@ -207,14 +293,10 @@ var AddBody = function (_React$Component) {
                             { "for": "notes" },
                             "Notes:"
                         ),
-                        React.createElement("textarea", { className: "form-control", id: "notes", rows: "3" })
+                        React.createElement("textarea", { className: "form-control", id: "bodyNotes", rows: "3", defaultValue: "" })
                     ),
-                    React.createElement(
-                        "button",
-                        null,
-                        "Add New ",
-                        this.state.water
-                    )
+                    React.createElement("input", { id: "csrfToken", type: "hidden", name: "_csrf", value: this.props.csrf }),
+                    React.createElement("input", { type: "submit", value: 'Add New ' + this.state.water })
                 )
             );
         }
@@ -225,11 +307,22 @@ var AddBody = function (_React$Component) {
 
 ;
 
-var init = function init() {
-    ReactDOM.render(React.createElement(AddBody, null), document.getElementById('newWaterBody'));
+var createPage = function createPage(token, user) {
+    ReactDOM.render(React.createElement(AddBody, { csrf: token, user: user }), document.getElementById('newWaterBody'));
 };
 
-window.onload = init;
+var getAccount = function getAccount(token) {
+    sendAjax('GET', '/accountInfo', null, function (result) {
+        createPage(token, result);
+    });
+};
+var getToken = function getToken() {
+    sendAjax('GET', '/getToken', null, function (result) {
+        getAccount(result.csrfToken);
+    });
+};
+
+window.onload = getToken;
 "use strict";
 
 var handleError = function handleError(message) {

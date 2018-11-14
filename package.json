@@ -12,8 +12,8 @@
     "pretest": "eslint ./server --fix",
     "buildLoginBundle": "babel ./client/login/ ./client/helper --presets react --out-file ./hosted/loginbundle.js",
     "buildAppBundle": "babel ./client/app/ ./client/helper --presets react --out-file ./hosted/dashboard.js",
-    "buildWaterBundle" : "babel ./client/app/forms/addWater.js ./client/app/forms/waterSlider.js ./client/helper --presets react --out-file ./hosted/waterbundle.js",
-    "buildBodyBundle" : "babel ./client/app/forms/addBody.js ./client/helper --presets react --out-file ./hosted/newbodybundle.js",
+    "buildWaterBundle" : "babel ./client/forms/addWater.js ./client/forms/waterSlider.js ./client/helper --presets react --out-file ./hosted/waterbundle.js",
+    "buildBodyBundle" : "babel ./client/forms/addBody.js ./client/helper --presets react --out-file ./hosted/newbodybundle.js",
     "nodemon": "nodemon --watch ./server ./server/app.js",
     "start": "node ./server/app.js"
   },

@@ -12,7 +12,7 @@ const router = (app) => {
   app.get('/weather', controllers.Weather.getWeather);
   app.get('/forcast', controllers.Weather.getForcast);
   app.get('/accountInfo', mid.requiresSecure, mid.requiresLogin, controllers.Account.getBasic);
-  app.get('/newWaterBody',(req, res) => { res.render('newBody'); });
+  app.get('/newWaterBody',mid.requiresSecure, mid.requiresLogin, (req, res) => { res.render('newBody'); });
   app.get('/addWater',(req, res) => { res.render('addWater'); });
 };
 
