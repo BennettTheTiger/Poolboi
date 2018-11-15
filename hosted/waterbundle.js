@@ -22,33 +22,42 @@ var AddBody = function (_React$Component) {
             freeChlorine: 5,
             ph: 7.3,
             alkalinity: 120,
-            cAcid: 150
+            cAcid: 150,
+            csrf: 'default'
         };
         _this.FormChange = _this.FormChange.bind(_this);
         return _this;
     }
 
+    //when child sliders change they update the state and rerender
+
+
     _createClass(AddBody, [{
         key: 'FormChange',
         value: function FormChange(e) {
             var name = e.currentTarget.attributes.name.value;
-            console.log(name, e.target.value);
             var data = new Object();
             data[name] = e.target.value;
-            console.dir(data);
             this.setState(data);
         }
     }, {
         key: 'SubmitData',
+
+        //submits the water sample
         value: function SubmitData(e) {
             e.preventDefault();
             console.log($('form').serialize());
+
+            sendAjax('POST', '/addWater', $('form').serialize(), function (result) {
+                console.dir(result);
+                window.location.href = '/dashboard';
+            });
         }
-
-        //reloads the page if they want to clear the data
-
     }, {
         key: 'ClearData',
+
+
+        //reloads the page if users want to clear the form
         value: function ClearData(e) {
             if (!window.confirm('Are you sure you want to CLEAR this data?')) e.preventDefault();
         }
@@ -92,9 +101,10 @@ var AddBody = function (_React$Component) {
                     React.createElement(WaterSlider, { title: 'Hardness', min: '0', max: '1000', step: '1', 'default': this.state.hardness, dataId: 'hardness', updateParent: this.FormChange }),
                     React.createElement(WaterSlider, { title: 'Chlorine', min: '0', max: '10', step: '.1', 'default': this.state.chlorine, dataId: 'chlorine', updateParent: this.FormChange }),
                     React.createElement(WaterSlider, { title: 'Free Chlorine', min: '0', max: '10', step: '.1', 'default': this.state.freeChlorine, dataId: 'freeChlorine', updateParent: this.FormChange }),
-                    React.createElement(WaterSlider, { title: 'PH', min: '6.2', max: '8.4', step: '.1', 'default': this.state.ph, dataId: 'ph', updateParent: this.FormChange }),
+                    React.createElement(WaterSlider, { title: 'PH', min: '6.2', max: '8.4', step: '.01', 'default': this.state.ph, dataId: 'ph', updateParent: this.FormChange }),
                     React.createElement(WaterSlider, { title: 'Alkalinity', min: '0', max: '240', step: '1', 'default': this.state.alkalinity, dataId: 'alkalinity', updateParent: this.FormChange }),
                     React.createElement(WaterSlider, { title: 'C Acid', min: '0', max: '300', step: '1', 'default': this.state.cAcid, dataId: 'cAcid', updateParent: this.FormChange }),
+                    React.createElement('input', { id: 'csrfToken', type: 'hidden', name: '_csrf', value: this.props.csrf }),
                     React.createElement(
                         'div',
                         { className: 'form-group' },
@@ -125,14 +135,21 @@ var AddBody = function (_React$Component) {
 
 ;
 
-var buildPage = function buildPage(water) {
+var buildPage = function buildPage(water, token) {
 
-    ReactDOM.render(React.createElement(AddBody, { options: water }), document.getElementById('addWater'));
+    ReactDOM.render(React.createElement(AddBody, { options: water, csrf: token }), document.getElementById('addWater'));
 };
 
+var getToken = function getToken(water) {
+    sendAjax('GET', '/getToken', null, function (result) {
+        buildPage(water, result.csrfToken);
+    });
+};
+
+// Get water bodies for the form > get a token > make the component
 window.onload = function () {
     $.getJSON("/waterBodies", function (data) {
-        if (data.bodies.length > 0) buildPage(data.bodies);else {
+        if (data.bodies.length > 0) getToken(data.bodies);else {
             console.log('Please add a pool or spa to add a water sample');
         }
     });

@@ -19,9 +19,9 @@ const port = process.env.PORT || process.env.NODE_PORT || 3000;
 // establish a db url
 const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/PoolboiV2';
 // connect to mongo database using mongoose
-mongoose.connect(dbURL, {
-  useMongoClient: true,
-  /* other options */
+mongoose.set('useCreateIndex', true);
+mongoose.connect(dbURL, {useNewUrlParser: true}, (err) => {
+  if (err) console.log('error connecting to the database');
 });
 
 // Redis config

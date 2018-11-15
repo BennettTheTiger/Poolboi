@@ -64,6 +64,6 @@ const removeBody = (request, response) => {
   });
 };
 
-module.exports.removeDomo = removeBody;
+module.exports.removeBody = removeBody;
 module.exports.getBodies = getBodies;
 module.exports.makeBody = makeBody;

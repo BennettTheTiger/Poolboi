@@ -16,7 +16,7 @@ const router = (app) => {
   app.post('/addWaterBody', mid.requiresLogin, mid.requiresSecure, controllers.WaterBody.makeBody);
   app.get('/waterBodies', mid.requiresLogin, mid.requiresSecure, controllers.WaterBody.getBodies);
   app.get('/newWaterTest', mid.requiresSecure, mid.requiresLogin, (req, res) => { res.render('addWater'); });
-  app.post('/addWater', mid.requiresLogin, mid.requiresSecure, (req, res) => { res.render('newBody'); });
+  app.post('/addWater', mid.requiresLogin, mid.requiresSecure, controllers.WaterSample.makeSample);
 };
 
 module.exports = router;
