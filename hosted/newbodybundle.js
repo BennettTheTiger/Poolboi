@@ -158,7 +158,6 @@ var AddBody = function (_React$Component) {
             clientData.notes = $('#bodyNotes').val();
             clientData.inSun = $('#sun').is(':checked');
             clientData.owner = this.props.user._id;
-            clientData._csrf = this.props.csrf;
             //validate data
             if (clientData.name == "") {
                 window.alert('Please give your ' + this.state.water + ' a name.');
@@ -174,8 +173,18 @@ var AddBody = function (_React$Component) {
             clientData.gallons = fluidData.volume;
             clientData.area = fluidData.area;
             console.log(JSON.stringify(clientData));
-            //make the ajax post    
-            sendAjax('POST', '/addWaterBody', JSON.stringify(clientData), function () {});
+
+            $.ajax({
+                url: '/addWaterBody',
+                type: 'POST',
+                headers: { 'X-CSRF-Token': this.props.csrf },
+                dataType: 'json',
+                success: function success(_success) {
+                    console.dir(_success);
+                    window.location.href = '/dashboard';
+                },
+                data: clientData
+            });
         }
     }, {
         key: "render",

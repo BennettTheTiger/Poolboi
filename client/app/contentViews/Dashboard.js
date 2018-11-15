@@ -11,13 +11,7 @@ class Dashboard extends React.Component {
         this.changeContent = this.changeContent.bind(this);
 
       }
-      componentWillMount(){
-        //load account info
-        sendAjax('GET','/accountInfo',null,(data) => {
-          this.setState({userData: data});
-        });
-        
-      }
+     
       changeContent(newElement){
         this.setState({mainContent: newElement});
       };
@@ -26,7 +20,7 @@ class Dashboard extends React.Component {
       render() {
         return (
           <div className="container-fluid">
-            <DashNav account={this.state.userData} weather={this.props.weather} newContent={this.changeContent}/>
+            <DashNav account={this.props.account} weather={this.props.weather} bodies={this.props.bodies} newContent={this.changeContent}/>
             <section>{this.state.mainContent}</section>
           </div>
         );
@@ -35,15 +29,40 @@ class Dashboard extends React.Component {
 
 
 
-const init = (data) => {    
+const init = (data) => {  
+  //get water bodies too  
+  let waterBodies;
+  
     ReactDOM.render(
-      <Dashboard weather={data}/>,document.getElementById('dashboard')
+      <Dashboard weather={data.weather} account={data.account} bodies={data.body}/>,document.getElementById('dashboard')
     );
   };
+
+  const getWaterBodies = (account,weather) =>{
+    sendAjax('GET','/waterBodies',null,(bodyData) => {
+      let data = {};
+      data.body = bodyData.bodies;
+      data.weather = weather;
+      data.account = account;
+      init(data)
+    });
+  }
+
+  //want to make this use take a json 
+  const getWeather = (account) =>{
+    sendAjax('GET','/weather',null,(weatherData) => {
+      getWaterBodies(account,weatherData)
+    });
+};
+
+  const getAccount = () =>{
+    sendAjax('GET','/accountInfo',null,(accountData) => {
+      getWeather(accountData);
+    });
   
+  }
+
+ //get an account > get water bodies > get weather give this to the dashboard as props
   window.onload = () =>{
-    sendAjax('GET','/weather',null, (result) => {
-      console.dir(result);
-      init(result);
-    });   
+   getAccount();
   };

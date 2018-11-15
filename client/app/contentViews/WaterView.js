@@ -1,20 +1,33 @@
 const WaterView = (props) =>
 {
+
+    let allBodies =  props.bodies.map((water) => {
+                        return  <WaterBodyView body={water}/>
+                    });
+
+    if(props.bodies.length === 0){
+        allBodies = <h5 className="col-sm-8 text-center">Lets <a href="/newWaterBody">add</a> a pool or spa.</h5>
+    }
     return(
         <div>
-            <section>
-                <h2>My Water</h2>
+            <section className="container-fluid">
+                <h2 className="row">My Water<a href="/newWaterBody"><PlusIcon/></a></h2>
                 <div className="row"> 
-                    <WaterBodyView/>
-                    <a href="/newWaterBody"><PlusIcon size="col-sm-4"/></a>
+                   {allBodies}
                     
                 </div>
             </section>
-            <section>
-                <h2>Results</h2>
+            <section className="container-fluid">
+                <h2 className="row">Results<a href="/newWaterTest"><PlusIcon/></a></h2>
+                <div className="row"> 
+            
+                    
+                </div>
             </section>
         </div>
     );
 }
+
+
 
 

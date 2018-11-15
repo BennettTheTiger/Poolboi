@@ -57,7 +57,7 @@ WaterBodySchema.statics.findByOwner = (ownerId, callback) => {
     owner: convertId(ownerId),
   };
 
-  return WaterBodyModel.find(search).select('name age felonies').exec(callback);
+  return WaterBodyModel.find(search).exec(callback);
 };
 
 // Delete a Domo by its id

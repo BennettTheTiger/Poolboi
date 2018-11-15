@@ -5,7 +5,7 @@ const zipcode = require('zipcodes');
 
 // gets the current weather for a zipcode
 const getWeather = (req, res) => {
-  const location = zipcode.lookup(14589);
+  const location = zipcode.lookup(req.session.account.zip);
   darksky
     .options({
       latitude: location.latitude,
@@ -19,7 +19,7 @@ const getWeather = (req, res) => {
 };
 
 const getForcast = (req, res) => {
-  const location = zipcode.lookup(14589);
+  const location = zipcode.lookup(req.body.zip);
   darksky
     .options({
       latitude: location.latitude,

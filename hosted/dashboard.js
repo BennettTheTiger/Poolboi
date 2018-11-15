@@ -27,7 +27,7 @@ var DashNav = function DashNav(props) {
             React.createElement(
                 "span",
                 { onClick: function onClick() {
-                        return props.newContent(React.createElement(WaterView, null));
+                        return props.newContent(React.createElement(WaterView, { bodies: props.bodies }));
                     } },
                 "Water"
             )
@@ -189,16 +189,6 @@ var Dashboard = function (_React$Component) {
   }
 
   _createClass(Dashboard, [{
-    key: 'componentWillMount',
-    value: function componentWillMount() {
-      var _this2 = this;
-
-      //load account info
-      sendAjax('GET', '/accountInfo', null, function (data) {
-        _this2.setState({ userData: data });
-      });
-    }
-  }, {
     key: 'changeContent',
     value: function changeContent(newElement) {
       this.setState({ mainContent: newElement });
@@ -209,7 +199,7 @@ var Dashboard = function (_React$Component) {
       return React.createElement(
         'div',
         { className: 'container-fluid' },
-        React.createElement(DashNav, { account: this.state.userData, weather: this.props.weather, newContent: this.changeContent }),
+        React.createElement(DashNav, { account: this.props.account, weather: this.props.weather, bodies: this.props.bodies, newContent: this.changeContent }),
         React.createElement(
           'section',
           null,
@@ -223,14 +213,38 @@ var Dashboard = function (_React$Component) {
 }(React.Component);
 
 var init = function init(data) {
-  ReactDOM.render(React.createElement(Dashboard, { weather: data }), document.getElementById('dashboard'));
+  //get water bodies too  
+  var waterBodies = void 0;
+
+  ReactDOM.render(React.createElement(Dashboard, { weather: data.weather, account: data.account, bodies: data.body }), document.getElementById('dashboard'));
 };
 
-window.onload = function () {
-  sendAjax('GET', '/weather', null, function (result) {
-    console.dir(result);
-    init(result);
+var getWaterBodies = function getWaterBodies(account, weather) {
+  sendAjax('GET', '/waterBodies', null, function (bodyData) {
+    var data = {};
+    data.body = bodyData.bodies;
+    data.weather = weather;
+    data.account = account;
+    init(data);
   });
+};
+
+//want to make this use take a json 
+var getWeather = function getWeather(account) {
+  sendAjax('GET', '/weather', null, function (weatherData) {
+    getWaterBodies(account, weatherData);
+  });
+};
+
+var getAccount = function getAccount() {
+  sendAjax('GET', '/accountInfo', null, function (accountData) {
+    getWeather(accountData);
+  });
+};
+
+//get an account > get water bodies > get weather give this to the dashboard as props
+window.onload = function () {
+  getAccount();
 };
 "use strict";
 
@@ -258,90 +272,125 @@ var MainView = function MainView(props) {
 var PlusIcon = function PlusIcon(props) {
     return React.createElement(
         "div",
-        { className: props.size },
+        { style: { paddingLeft: '10px' } },
         React.createElement("i", { className: "far fa-plus-square" })
     );
 };
-"use strict";
+'use strict';
 
 var WaterBodyView = function WaterBodyView(props) {
     var delteBody = function delteBody() {
-        window.confirm('Are you sure you want to delete nameHere \n It will also delete all water samples for nameHere');
+        var remove = window.confirm('Are you sure you want to delete ' + props.body.name + ' \nThis will also delete all water samples for ' + props.body.name);
+        if (remove) {
+            console.log('delete water body id and all samples where bodyId is this one');
+        }
     };
+
+    var type = 'Pool';
+    if (!props.body.isPool) type = 'Spa';
+
     return React.createElement(
-        "div",
-        { className: "col-sm-4" },
+        'div',
+        { className: 'col-sm-4' },
         React.createElement(
-            "p",
+            'p',
             null,
-            "Name:"
+            'Name:',
+            props.body.name
         ),
         React.createElement(
-            "p",
+            'p',
             null,
-            "Location:"
+            'Location:',
+            props.body.zipCode
         ),
         React.createElement(
-            "p",
+            'p',
             null,
-            "Type:"
+            'Type:',
+            type
         ),
         React.createElement(
-            "p",
+            'p',
             null,
-            "Water Health:"
+            'Water Health:'
         ),
         React.createElement(
-            "p",
+            'button',
             null,
-            "View History"
+            'View History'
         ),
         React.createElement(
-            "p",
-            null,
-            "ID:"
+            'p',
+            { className: 'small' },
+            'ID:',
+            props.body._id
         ),
-        React.createElement("hr", null),
+        React.createElement('hr', null),
         React.createElement(
-            "button",
+            'button',
             { onClick: delteBody },
-            "Delete"
+            'Delete'
         )
     );
 };
 "use strict";
 
 var WaterView = function WaterView(props) {
+
+    var allBodies = props.bodies.map(function (water) {
+        return React.createElement(WaterBodyView, { body: water });
+    });
+
+    if (props.bodies.length === 0) {
+        allBodies = React.createElement(
+            "h5",
+            { className: "col-sm-8 text-center" },
+            "Lets ",
+            React.createElement(
+                "a",
+                { href: "/newWaterBody" },
+                "add"
+            ),
+            " a pool or spa."
+        );
+    }
     return React.createElement(
         "div",
         null,
         React.createElement(
             "section",
-            null,
+            { className: "container-fluid" },
             React.createElement(
                 "h2",
-                null,
-                "My Water"
+                { className: "row" },
+                "My Water",
+                React.createElement(
+                    "a",
+                    { href: "/newWaterBody" },
+                    React.createElement(PlusIcon, null)
+                )
             ),
             React.createElement(
                 "div",
                 { className: "row" },
-                React.createElement(WaterBodyView, null),
-                React.createElement(
-                    "a",
-                    { href: "/newWaterBody" },
-                    React.createElement(PlusIcon, { size: "col-sm-4" })
-                )
+                allBodies
             )
         ),
         React.createElement(
             "section",
-            null,
+            { className: "container-fluid" },
             React.createElement(
                 "h2",
-                null,
-                "Results"
-            )
+                { className: "row" },
+                "Results",
+                React.createElement(
+                    "a",
+                    { href: "/newWaterTest" },
+                    React.createElement(PlusIcon, null)
+                )
+            ),
+            React.createElement("div", { className: "row" })
         )
     );
 };

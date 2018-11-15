@@ -16,26 +16,33 @@ var AddBody = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (AddBody.__proto__ || Object.getPrototypeOf(AddBody)).call(this, props));
 
-        _this.state = {};
-
+        _this.state = {
+            hardness: 500,
+            chlorine: 5,
+            freeChlorine: 5,
+            ph: 7.3,
+            alkalinity: 120,
+            cAcid: 150
+        };
+        _this.FormChange = _this.FormChange.bind(_this);
         return _this;
     }
 
     _createClass(AddBody, [{
-        key: 'ComponentDidMount',
-        value: function ComponentDidMount() {
-            console.log('component loaded');
-        }
-    }, {
-        key: 'GetWaterBodies',
-        value: function GetWaterBodies() {
-            console.log('Getting water bodies');
-            //Get Water bodies so we know what water to the test was on
+        key: 'FormChange',
+        value: function FormChange(e) {
+            var name = e.currentTarget.attributes.name.value;
+            console.log(name, e.target.value);
+            var data = new Object();
+            data[name] = e.target.value;
+            console.dir(data);
+            this.setState(data);
         }
     }, {
         key: 'SubmitData',
-        value: function SubmitData() {
-            console.log('adding water test data');
+        value: function SubmitData(e) {
+            e.preventDefault();
+            console.log($('form').serialize());
         }
 
         //reloads the page if they want to clear the data
@@ -45,18 +52,17 @@ var AddBody = function (_React$Component) {
         value: function ClearData(e) {
             if (!window.confirm('Are you sure you want to CLEAR this data?')) e.preventDefault();
         }
-
-        //makes form text dynamic for pool or spa NOTE false is a string not a bool
-
-    }, {
-        key: 'changeType',
-        value: function changeType(e) {
-            if (e.target.value === 'false') this.setState({ water: 'Spa' });else this.setState({ water: 'Pool' });
-        }
     }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
+            //make a bunch of list options from the accounts bodies of water
+            var allOptions = this.props.options.map(function (body) {
+                return React.createElement(
+                    'option',
+                    { value: body._id },
+                    body.name
+                );
+            });
 
             return React.createElement(
                 'div',
@@ -68,7 +74,7 @@ var AddBody = function (_React$Component) {
                 ),
                 React.createElement(
                     'form',
-                    null,
+                    { id: 'waterResult' },
                     React.createElement(
                         'div',
                         { className: 'form-group' },
@@ -79,27 +85,16 @@ var AddBody = function (_React$Component) {
                         ),
                         React.createElement(
                             'select',
-                            { className: 'form-control', id: 'type', onChange: function onChange(e) {
-                                    return _this2.changeType(e);
-                                } },
-                            React.createElement(
-                                'option',
-                                { selected: true, value: 'true' },
-                                'Pool'
-                            ),
-                            React.createElement(
-                                'option',
-                                { value: 'false' },
-                                'Spa'
-                            )
+                            { name: 'body', className: 'form-control', id: 'type' },
+                            allOptions
                         )
                     ),
-                    React.createElement(WaterSlider, { name: 'Hardness', min: '0', max: '1000', step: '1', 'default': '500' }),
-                    React.createElement(WaterSlider, { name: 'Chlorine', min: '0', max: '10', step: '.1', 'default': '5' }),
-                    React.createElement(WaterSlider, { name: 'Free Chlorine', min: '0', max: '10', step: '.1', 'default': '5' }),
-                    React.createElement(WaterSlider, { name: 'PH', min: '6.2', max: '8.4', step: '.1', 'default': '7.3' }),
-                    React.createElement(WaterSlider, { name: 'Alkalinity', min: '0', max: '240', step: '1', 'default': '120' }),
-                    React.createElement(WaterSlider, { name: 'C Acid', min: '0', max: '300', step: '1', 'default': '150' }),
+                    React.createElement(WaterSlider, { title: 'Hardness', min: '0', max: '1000', step: '1', 'default': this.state.hardness, dataId: 'hardness', updateParent: this.FormChange }),
+                    React.createElement(WaterSlider, { title: 'Chlorine', min: '0', max: '10', step: '.1', 'default': this.state.chlorine, dataId: 'chlorine', updateParent: this.FormChange }),
+                    React.createElement(WaterSlider, { title: 'Free Chlorine', min: '0', max: '10', step: '.1', 'default': this.state.freeChlorine, dataId: 'freeChlorine', updateParent: this.FormChange }),
+                    React.createElement(WaterSlider, { title: 'PH', min: '6.2', max: '8.4', step: '.1', 'default': this.state.ph, dataId: 'ph', updateParent: this.FormChange }),
+                    React.createElement(WaterSlider, { title: 'Alkalinity', min: '0', max: '240', step: '1', 'default': this.state.alkalinity, dataId: 'alkalinity', updateParent: this.FormChange }),
+                    React.createElement(WaterSlider, { title: 'C Acid', min: '0', max: '300', step: '1', 'default': this.state.cAcid, dataId: 'cAcid', updateParent: this.FormChange }),
                     React.createElement(
                         'div',
                         { className: 'form-group' },
@@ -108,20 +103,16 @@ var AddBody = function (_React$Component) {
                             { 'for': 'notes' },
                             'Notes:'
                         ),
-                        React.createElement('textarea', { className: 'form-control', id: 'notes', rows: '3' })
+                        React.createElement('textarea', { name: 'notes', className: 'form-control', id: 'notes', rows: '3', placeholder: 'Add Notes Here' })
                     ),
                     React.createElement(
                         'button',
-                        { onClick: function onClick(e) {
-                                return _this2.ClearData(e);
-                            } },
+                        { onClick: this.ClearData },
                         'Clear Test Results'
                     ),
                     React.createElement(
                         'button',
-                        { onClick: function onClick(e) {
-                                return _this2.SubmitData(e);
-                            } },
+                        { onClick: this.SubmitData },
                         'Save Test Results'
                     )
                 )
@@ -134,72 +125,43 @@ var AddBody = function (_React$Component) {
 
 ;
 
-var init = function init() {
-    ReactDOM.render(React.createElement(AddBody, null), document.getElementById('addWater'));
+var buildPage = function buildPage(water) {
+
+    ReactDOM.render(React.createElement(AddBody, { options: water }), document.getElementById('addWater'));
 };
 
-window.onload = init;
+window.onload = function () {
+    $.getJSON("/waterBodies", function (data) {
+        if (data.bodies.length > 0) buildPage(data.bodies);else {
+            console.log('Please add a pool or spa to add a water sample');
+        }
+    });
+};
 "use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var WaterSlider = function WaterSlider(props) {
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var WaterSlider = function (_React$Component) {
-    _inherits(WaterSlider, _React$Component);
-
-    function WaterSlider(props) {
-        _classCallCheck(this, WaterSlider);
-
-        var _this = _possibleConstructorReturn(this, (WaterSlider.__proto__ || Object.getPrototypeOf(WaterSlider)).call(this, props));
-
-        _this.state = {
-            value: _this.props.default
-        };
-
-        _this.updateData = _this.updateData.bind(_this);
-        return _this;
-    }
-
-    _createClass(WaterSlider, [{
-        key: "componentDidMount",
-        value: function componentDidMount() {}
-    }, {
-        key: "updateData",
-        value: function updateData(event) {
-            this.setState({ value: event.target.value });
-        }
-    }, {
-        key: "render",
-        value: function render() {
-            return React.createElement(
-                "div",
-                { className: "form-group" },
-                React.createElement(
-                    "label",
-                    { "for": "waterName" },
-                    this.props.name,
-                    ":",
-                    this.state.value
-                ),
-                React.createElement("input", { type: "range",
-                    min: this.props.min,
-                    max: this.props.max,
-                    step: this.props.step,
-                    className: "form-control",
-                    onChange: this.updateData,
-                    defaultValue: this.props.default
-                })
-            );
-        }
-    }]);
-
-    return WaterSlider;
-}(React.Component);
+    return React.createElement(
+        "div",
+        { className: "form-group" },
+        React.createElement(
+            "label",
+            { "for": "waterName" },
+            props.title,
+            ":",
+            props.default
+        ),
+        React.createElement("input", { type: "range",
+            min: props.min,
+            max: props.max,
+            step: props.step,
+            className: "form-control",
+            onChange: props.updateParent,
+            defaultValue: props.default,
+            name: props.dataId
+        })
+    );
+};
 "use strict";
 
 var handleError = function handleError(message) {

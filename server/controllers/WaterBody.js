@@ -5,20 +5,28 @@ const WaterBody = models.WaterBody;
 
 const makeBody = (req, res) => {
   const data = req.body;
+
   console.dir(data);
-
-  const bodyData = JSON.parse(data);
-
-  const newBody = new WaterBody.WaterBodyModel(bodyData);
+  const dataStaging = {
+    owner: data.owner,
+    gallons: data.gallons,
+    surfaceArea: data.area,
+    zipCode: data.zip,
+    isPool: data.isPool,
+    inSun: data.inSun,
+    name: data.name,
+    notes: data.notes,
+  };
+  const newBody = new WaterBody.WaterBodyModel(dataStaging);
 
   const bodyPromise = newBody.save();
 
-  bodyPromise.then(() => res.json({ success: 'IT WORKED' }));// { redirect: '/maker' }
+  bodyPromise.then(() => res.json({ redirect: '/dashboard' }));
 
   bodyPromise.catch((err) => {
     console.log(err);
     if (err.code === 11000) {
-      return res.status(400).json({ error: 'Domo already exists' });
+      return res.status(400).json({ error: 'Water Body already exists' });
     }
 
     return res.status(400).json({ error: 'Oppz something is broken lol' });
@@ -57,5 +65,5 @@ const removeBody = (request, response) => {
 };
 
 module.exports.removeDomo = removeBody;
-module.exports.getDomos = getBodies;
+module.exports.getBodies = getBodies;
 module.exports.makeBody = makeBody;

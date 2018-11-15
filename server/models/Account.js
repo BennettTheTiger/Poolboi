@@ -28,6 +28,10 @@ const AccountSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  lastSignedIn: {
+    type: Date,
+    default: Date.now,
+  },
   zip: {
     type: Number,
     required: false,
