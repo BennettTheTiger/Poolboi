@@ -374,21 +374,35 @@ var WaterTestView = function WaterTestView(props) {
 'use strict';
 
 var WaterView = function WaterView(props) {
+    var allData = [];
 
-    var allSamples = [];
-    props.bodies.forEach(function (body) {
-        sendAjax('GET', '/addWater', body, function (success) {
-            console.dir(success);
-        });
-    });
-    console.dir(allSamples);
+    var addWater = function addWater(newData) {
+        return allData.push(newData);
+    };
+
+    var fetchWater = function fetchWater(bodies) {
+        return new Promise(function (resolve, reject) {
+            bodies.forEach(function (item) {
+                sendAjax('GET', '/addWater', item, function (data) {
+                    console.dir(data);
+                    addWater(data);
+                });
+            }); //data request
+            resolve;
+        }); //promise wrapper
+    }; //function data call
+
+
+    fetchWater(props.bodies).then(console.dir(allData));
+
+    console.log(allData);
 
     var allBodies = props.bodies.map(function (water) {
         return React.createElement(WaterBodyView, { body: water });
     });
 
-    var allTests = props.bodies.map(function (sample) {
-        return null;
+    var allTests = allData.map(function (sample) {
+        console.dir(sample);
     });
 
     if (props.bodies.length === 0) {
@@ -444,6 +458,7 @@ var WaterView = function WaterView(props) {
             React.createElement(
                 'div',
                 { className: 'row' },
+                allTests,
                 React.createElement(WaterTestView, null)
             )
         )

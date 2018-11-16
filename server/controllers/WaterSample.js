@@ -38,7 +38,7 @@ const makeSample = (req, res) => {
 
 // request water samples from a water body id
 const getSamples = (req, res) => {
-console.dir(req.query);
+  console.dir(req.query);
   models.WaterSample.WaterSampleModel.findByBody(req.query, (err, results) => {
     if (err) {
       console.log(err);

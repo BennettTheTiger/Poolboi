@@ -1,21 +1,32 @@
 const WaterView = (props) =>
 {
+    let allData = [];
+    
+    const addWater = (newData) => allData.push(newData);
 
-    let allSamples = [];
-        props.bodies.forEach(body => {
-            sendAjax('GET', '/addWater', body, (success)=>{
-                console.dir(success);
-                allSamples.add(success);
-            });
-        });
-    console.dir(allSamples);
+    const fetchWater = (bodies) => {
+        return new Promise(function(resolve, reject){
+            bodies.forEach(item => {
+                sendAjax('GET', '/addWater', item, data =>{
+                    console.dir(data);
+                    addWater(data);
+                });
+            });//data request
+            resolve
+        });//promise wrapper
+    }//function data call
+    
+    //Keeps resolving prematurely
+    fetchWater(props.bodies).then(console.dir(allData));
+    
+    console.log(allData);
 
     let allBodies =  props.bodies.map((water) => {
                         return  <WaterBodyView body={water}/>
                     });
 
-    let allTests = props.bodies.map((sample) => {
-        return null
+    let allTests = allData.map((sample) => {
+        console.dir(sample);
     })
 
 
@@ -36,7 +47,7 @@ const WaterView = (props) =>
             <section className="container-fluid">
                 <h2 className="row">Test Results<a href="/newWaterTest"><PlusIcon/></a></h2>
                 <div className="row"> 
-                
+                    {allTests}
                     <WaterTestView/>
                 </div>
             </section>
