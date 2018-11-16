@@ -52,6 +52,7 @@ AccountSchema.statics.toAPI = doc => ({
   // _id is built into your mongo document and is guaranteed to be unique
   username: doc.username,
   createdDate: doc.createdDate,
+  lastSignedIn: doc.lastSignedIn,
   zip: doc.zip,
   firstName: doc.firstName,
   lastName: doc.lastName,
@@ -103,6 +104,18 @@ AccountModel.findByUsername(username, (err, doc) => {
     return callback();
   });
 });
+
+AccountSchema.statics.updatePassword = (id, data, callback) => {
+  AccountModel.updateOne({ _id: id }, { $set: {
+    salt: data.tablesalt,
+    password: data.password },
+  }).exec(callback);
+};
+
+AccountSchema.statics.updateSignIn = (id) => {
+  console.log('updating sign in date');
+  AccountModel.updateOne({ _id: id }, { $set: { lastSignedIn: new Date() } });
+};
 
 AccountModel = mongoose.model('Account', AccountSchema);
 

@@ -7,12 +7,6 @@ var DashNav = function DashNav(props) {
         React.createElement(
             "div",
             { className: "nav-item nav-link" },
-            "Hello ",
-            props.account.username
-        ),
-        React.createElement(
-            "div",
-            { className: "nav-item nav-link" },
             React.createElement(
                 "span",
                 { onClick: function onClick() {
@@ -27,7 +21,7 @@ var DashNav = function DashNav(props) {
             React.createElement(
                 "span",
                 { onClick: function onClick() {
-                        return props.newContent(React.createElement(WaterView, { bodies: props.bodies }));
+                        return props.newContent(React.createElement(WaterView, { bodies: props.bodies, account: props.account }));
                     } },
                 "Water"
             )
@@ -58,7 +52,8 @@ var DashNav = function DashNav(props) {
             React.createElement(
                 "a",
                 { href: "/logout" },
-                "Log Out"
+                "Log Out ",
+                props.account.username
             )
         ),
         React.createElement("hr", null)
@@ -88,17 +83,19 @@ window.onload = () =>{
 var AccountView = function AccountView(props) {
 
     //Convert Mongo Dbs ISO time to a readable time string
-    var dateString = String(props.account.createdDate);
-    dateString = dateString.slice(0, 10);
-    dateString = dateString.split("-");
-    var readableDate = dateString[1] + '/' + dateString[2] + '/' + dateString[0];
+    var readableDate = function readableDate(data) {
+        var dateString = String(props.account.createdDate);
+        dateString = dateString.slice(0, 10);
+        dateString = dateString.split("-");
+        return dateString[1] + '/' + dateString[2] + '/' + dateString[0];
+    };
 
     var updateZip = function updateZip() {
         console.log('updateZip');
     };
 
     var updatePassword = function updatePassword() {
-        console.log('password clicked');
+        window.location.href = '/newPassword';
     };
 
     return React.createElement(
@@ -129,7 +126,13 @@ var AccountView = function AccountView(props) {
                 'p',
                 null,
                 'Member Since: ',
-                readableDate
+                readableDate(props.account.createdDate)
+            ),
+            React.createElement(
+                'p',
+                null,
+                'Last Sign in:',
+                readableDate(props.account.lastSignedIn)
             ),
             React.createElement(
                 'p',
@@ -145,16 +148,12 @@ var AccountView = function AccountView(props) {
             ),
             React.createElement(
                 'button',
-                { onClick: function onClick() {
-                        return updateZip();
-                    } },
+                { onClick: updateZip, disabled: true },
                 'Change Zip'
             ),
             React.createElement(
                 'button',
-                { onClick: function onClick() {
-                        return updatePassword();
-                    } },
+                { onClick: updatePassword },
                 'Change Password'
             )
         )
@@ -246,24 +245,34 @@ var getAccount = function getAccount() {
 window.onload = function () {
   getAccount();
 };
-"use strict";
+'use strict';
 
 var MainView = function MainView(props) {
     console.dir(props);
+    var uvWarning = void 0; //Warn the user if the UV index is above 5
+    if (props.weather.currently.uvIndex > 5) uvWarning = 'Better wear some sunscreen!';
     return React.createElement(
-        "div",
+        'div',
         null,
         React.createElement(
-            "p",
+            'p',
             null,
-            "The current temperature is ",
+            'The current temperature is ',
             props.weather.currently.temperature
         ),
         React.createElement(
-            "p",
+            'p',
             null,
-            "Feels like ",
+            'Feels like ',
             props.weather.currently.apparentTemperature
+        ),
+        React.createElement(
+            'p',
+            null,
+            'The current UV index is ',
+            props.weather.currently.uvIndex,
+            '. ',
+            uvWarning
         )
     );
 };
@@ -291,7 +300,7 @@ var WaterBodyView = function WaterBodyView(props) {
 
     return React.createElement(
         'div',
-        { className: 'col-sm-4' },
+        { className: 'col-sm-6' },
         React.createElement(
             'p',
             null,
@@ -336,61 +345,112 @@ var WaterBodyView = function WaterBodyView(props) {
 };
 "use strict";
 
+var WaterTestView = function WaterTestView(props) {
+
+    return React.createElement(
+        "div",
+        { className: "row" },
+        React.createElement(
+            "div",
+            { className: "col-xs-4" },
+            "Name"
+        ),
+        React.createElement(
+            "div",
+            { className: "col-xs-4" },
+            "Date"
+        ),
+        React.createElement(
+            "div",
+            { className: "col-xs-4" },
+            React.createElement(
+                "button",
+                null,
+                "View Test"
+            )
+        )
+    );
+};
+'use strict';
+
 var WaterView = function WaterView(props) {
+
+    console.log(JSON.stringify(props.bodies));
+    sendAjax('GET', '/addWater', { water: props.bodies }, function (success) {
+        console.dir(success);
+    });
 
     var allBodies = props.bodies.map(function (water) {
         return React.createElement(WaterBodyView, { body: water });
     });
 
+    var allTests = props.bodies.map(function (sample) {
+        return null;
+    });
+
     if (props.bodies.length === 0) {
         allBodies = React.createElement(
-            "h5",
-            { className: "col-sm-8 text-center" },
-            "Lets ",
+            'h5',
+            { className: 'col-sm-8 text-center' },
+            'Lets ',
             React.createElement(
-                "a",
-                { href: "/newWaterBody" },
-                "add"
+                'a',
+                { href: '/newWaterBody' },
+                'add'
             ),
-            " a pool or spa."
+            ' a pool or spa.'
         );
     }
     return React.createElement(
-        "div",
+        'div',
         null,
         React.createElement(
-            "section",
-            { className: "container-fluid" },
+            'section',
+            { className: 'container-fluid' },
             React.createElement(
-                "h2",
-                { className: "row" },
-                "My Water",
+                'h2',
+                { className: 'row' },
+                'My Water',
                 React.createElement(
-                    "a",
-                    { href: "/newWaterBody" },
+                    'a',
+                    { href: '/newWaterBody' },
                     React.createElement(PlusIcon, null)
                 )
             ),
             React.createElement(
-                "div",
-                { className: "row" },
+                'div',
+                { className: 'row' },
                 allBodies
             )
         ),
         React.createElement(
-            "section",
-            { className: "container-fluid" },
+            'section',
+            { className: 'container-fluid' },
             React.createElement(
-                "h2",
-                { className: "row" },
-                "Results",
+                'h2',
+                { className: 'row' },
+                'Test Results',
                 React.createElement(
-                    "a",
-                    { href: "/newWaterTest" },
+                    'a',
+                    { href: '/newWaterTest' },
                     React.createElement(PlusIcon, null)
                 )
             ),
-            React.createElement("div", { className: "row" })
+            React.createElement(
+                'div',
+                { className: 'row' },
+                React.createElement(
+                    'h5',
+                    { className: 'col-sm-8 text-center' },
+                    'Lets ',
+                    React.createElement(
+                        'a',
+                        { href: '/newWaterBody' },
+                        'add'
+                    ),
+                    ' a test.'
+                )
+            )
         )
     );
 };

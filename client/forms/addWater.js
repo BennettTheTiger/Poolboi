@@ -91,7 +91,7 @@ const getToken = (water) =>{
     $.getJSON( "/waterBodies", (data) =>{
         if(data.bodies.length > 0) getToken(data.bodies);
         else{
-            console.log('Please add a pool or spa to add a water sample')
+            window.location.href = '/error'
         }
     });
   };

@@ -20,7 +20,7 @@ const port = process.env.PORT || process.env.NODE_PORT || 3000;
 const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/PoolboiV2';
 // connect to mongo database using mongoose
 mongoose.set('useCreateIndex', true);
-mongoose.connect(dbURL, {useNewUrlParser: true}, (err) => {
+mongoose.connect(dbURL, { useNewUrlParser: true }, (err) => {
   if (err) console.log('error connecting to the database');
 });
 

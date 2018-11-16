@@ -66,10 +66,8 @@ const WaterSampleSchema = new mongoose.Schema({
 });
 
 WaterSampleSchema.statics.findByBody = (bodyId, callback) => {
-  const search = {
-    owner: convertId(bodyId),
-  };
-  return WaterSampleModel.find(search).exec(callback);
+  console.log(`looking for water with owner id ${bodyId}`);
+  return WaterSampleModel.find({ waterBody: bodyId }).exec(callback);
 };
 
 // Delete a water sample by its id
@@ -77,6 +75,7 @@ WaterSampleSchema.statics.removeSample = (sampleId, callback) => {
   const id = {
     _id: convertId(sampleId),
   };
+
   return WaterSampleModel.deleteOne(id).exec(callback);
 };
 

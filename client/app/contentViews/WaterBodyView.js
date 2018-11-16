@@ -11,7 +11,7 @@ const WaterBodyView = (props) =>
     if(!props.body.isPool) type = 'Spa';
 
     return(
-            <div className="col-sm-4">
+            <div className="col-sm-6">
                 <p>Name:{props.body.name}</p>
                 <p>Location:{props.body.zipCode}</p>
                 <p>Type:{type}</p>

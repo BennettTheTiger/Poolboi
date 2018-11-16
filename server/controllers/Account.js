@@ -8,6 +8,7 @@ const loginPage = (req, res) => {
 
 
 const logout = (req, res) => {
+  Account.AccountModel.updateSignIn(req.session.account._id);
   req.session.destroy();
   res.redirect('/');
 };
@@ -99,6 +100,22 @@ const signup = (request, response) => {
     });
   });
 };
+// update a users password
+const updatePassword = (req, res) => {
+  Account.AccountModel.generateHash(req.body.newpass1, (salt, hash) => {
+    const newPassword = {
+      tablesalt: salt,
+      password: hash,
+    };
+    Account.AccountModel.updatePassword(req.session.account._id, newPassword, (err) => {
+      if (err) {
+        console.log(err);
+        res.status(500).json({ msg: 'Unable to change your password' });
+      }
+      res.status(200).json({ msg: 'password set' });
+    });
+  });
+};
 
 const getBasic = (request, response) => response.status(200).json(request.session.account);
 
@@ -113,6 +130,7 @@ const getToken = (request, response) => {
   res.json(csrfJSON);
 };
 
+module.exports.updatePassword = updatePassword;
 module.exports.loginPage = loginPage;
 module.exports.login = login;
 module.exports.logout = logout;
