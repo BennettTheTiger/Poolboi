@@ -5,6 +5,7 @@ const WaterView = (props) =>
         props.bodies.forEach(body => {
             sendAjax('GET', '/addWater', body, (success)=>{
                 console.dir(success);
+                allSamples.add(success);
             });
         });
     console.dir(allSamples);
