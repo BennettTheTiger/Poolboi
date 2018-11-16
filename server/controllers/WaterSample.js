@@ -37,23 +37,16 @@ const makeSample = (req, res) => {
 };
 
 // request water samples from a water body id
-const getSamples = (request, response) => {
-  const req = request;
-  const res = response;
-  const data = req.query.water;
-  let allSamples = {};
-  data.forEach(body => {
-    console.log(`Searching ${body.name}`, body._id);
-    models.WaterSample.WaterSampleModel.findByBody(body._id, (err, results) => {
-      if (err) {
-        console.log(err);
-        res.status(500).json({ err });
-      }
-      console.log(results);
-      allSamples[body._id] = results;
-    });// end of find samples
-  });// end foreach
-  res.status(200).json({ water: allSamples });
+const getSamples = (req, res) => {
+console.dir(req.query);
+  models.WaterSample.WaterSampleModel.findByBody(req.query, (err, results) => {
+    if (err) {
+      console.log(err);
+      res.status(500).json({ err });
+    }
+    console.log(results);
+    res.status(200).json(results);
+  });// end of find samples
 };
 
 

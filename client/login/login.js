@@ -25,8 +25,7 @@ const handleSignUp = (e) =>{
 
 const LoginWindow = (props) => {
     return (
-        <div className="loginWrapper">
-        <a href="/about">About</a>
+        <div className="loginWrapper container-fluid">
         <form id="loginForm"
             name="loginForm"
             onSubmit = {handleLogin}
@@ -35,18 +34,18 @@ const LoginWindow = (props) => {
             className = 'mainForm'
             >
             <label htmlFor="username">Username:</label>
-            <input id="user" type="text" name="username" placeholder="username"></input>
+            <input id="user" type="text" name="username" placeholder="username"></input><br/>
             <label htmlFor="pass">Password:</label>
-            <input id="pass" type="password" name="pass" placeholder="password"></input>
+            <input id="pass" type="password" name="pass" placeholder="password"></input><br/>
             
             <input type="hidden" name="_csrf" value={props.csrf}></input>
-
-            <input type="submit" className="formSubmit" value="Sign in"></input>
+            <input type="submit" className="buttonPadding" onClick={()=>{createSignupWindow((props.csrf))}} value="Sign Up"></input>
+            <input type="submit" className="formSubmit buttonPadding" value="Sign in"></input>
 
         </form>
         
-        <input type="submit" onClick={()=>{createSignupWindow((props.csrf))}} value="Sign Up"></input>
-        <span onClick={()=>{createSignupWindow((props.csrf))}}><h4>I'm new here, Sign Me Up!</h4></span>
+        <a href="/about">See what Poolboi can do for you!</a>
+        
         </div>
     );
 
@@ -62,25 +61,25 @@ const SignUpWindow = (props) => {
             method="POST"
             className = 'mainForm'
             >
-            <label htmlFor="username">Username:</label>
+            
             <input id="user" type="text" name="username" placeholder="username"></input><i className="fas fa-info-circle" title="This is the user name that you will login with"></i>
-            <label htmlFor="pass">Password:</label>
+           
             <input id="pass" type="password" name="pass" placeholder="password"></input>
-            <label htmlFor="pass2">Retype Password:</label>
+            
             <input id="pass2" type="password" name="pass2" placeholder="retype password"></input>
-            <h4>Help us get to know you, so we can better help you!</h4>
-            <label htmlFor="firstName">First Name:</label>
+            
+            <h4 className="buttonPadding">Help us get to know you, so we can better help you!</h4>
+            
             <input id="firstName" type="text" name="firstName" placeholder="first name"></input>
-            <label htmlFor="lastName">Last Name:</label>
             <input id="lastName" type="text" name="lastName" placeholder="last name"></input>
             <label htmlFor="zip">Whats your zip code</label>
             <input type="number" min="0" max="99999" name="zip" placeholder="12345"/>
             
             <input type="hidden" name="_csrf" value={props.csrf}></input>
 
-            <input type="submit" className="formSubmit" value="Sign in"></input>
+            <input type="submit" className="formSubmit buttonPadding" value="Create Account"></input>
 
-            <span onClick={()=> createLoginWindow((props.csrf))}><p>Oops, I already have an account take me back to the login page.</p></span>
+            <p className="small" >Oops, I already have an account <a href="/">take me back to the login page.</a></p>
         </form>
     );
 
@@ -109,4 +108,5 @@ const getToken = () =>{
 //onload getToken > setup > show login view
 window.onload = () =>{
     getToken();
+    
 }

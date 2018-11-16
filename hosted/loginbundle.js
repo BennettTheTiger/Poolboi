@@ -24,12 +24,7 @@ var handleSignUp = function handleSignUp(e) {
 var LoginWindow = function LoginWindow(props) {
     return React.createElement(
         'div',
-        { className: 'loginWrapper' },
-        React.createElement(
-            'a',
-            { href: '/about' },
-            'About'
-        ),
+        { className: 'loginWrapper container-fluid' },
         React.createElement(
             'form',
             { id: 'loginForm',
@@ -45,28 +40,24 @@ var LoginWindow = function LoginWindow(props) {
                 'Username:'
             ),
             React.createElement('input', { id: 'user', type: 'text', name: 'username', placeholder: 'username' }),
+            React.createElement('br', null),
             React.createElement(
                 'label',
                 { htmlFor: 'pass' },
                 'Password:'
             ),
             React.createElement('input', { id: 'pass', type: 'password', name: 'pass', placeholder: 'password' }),
+            React.createElement('br', null),
             React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
-            React.createElement('input', { type: 'submit', className: 'formSubmit', value: 'Sign in' })
-        ),
-        React.createElement('input', { type: 'submit', onClick: function onClick() {
-                createSignupWindow(props.csrf);
-            }, value: 'Sign Up' }),
-        React.createElement(
-            'span',
-            { onClick: function onClick() {
+            React.createElement('input', { type: 'submit', className: 'buttonPadding', onClick: function onClick() {
                     createSignupWindow(props.csrf);
-                } },
-            React.createElement(
-                'h4',
-                null,
-                'I\'m new here, Sign Me Up!'
-            )
+                }, value: 'Sign Up' }),
+            React.createElement('input', { type: 'submit', className: 'formSubmit buttonPadding', value: 'Sign in' })
+        ),
+        React.createElement(
+            'a',
+            { href: '/about' },
+            'See what Poolboi can do for you!'
         )
     );
 };
@@ -82,41 +73,16 @@ var SignUpWindow = function SignUpWindow(props) {
             method: 'POST',
             className: 'mainForm'
         },
-        React.createElement(
-            'label',
-            { htmlFor: 'username' },
-            'Username:'
-        ),
         React.createElement('input', { id: 'user', type: 'text', name: 'username', placeholder: 'username' }),
         React.createElement('i', { className: 'fas fa-info-circle', title: 'This is the user name that you will login with' }),
-        React.createElement(
-            'label',
-            { htmlFor: 'pass' },
-            'Password:'
-        ),
         React.createElement('input', { id: 'pass', type: 'password', name: 'pass', placeholder: 'password' }),
-        React.createElement(
-            'label',
-            { htmlFor: 'pass2' },
-            'Retype Password:'
-        ),
         React.createElement('input', { id: 'pass2', type: 'password', name: 'pass2', placeholder: 'retype password' }),
         React.createElement(
             'h4',
-            null,
+            { className: 'buttonPadding' },
             'Help us get to know you, so we can better help you!'
         ),
-        React.createElement(
-            'label',
-            { htmlFor: 'firstName' },
-            'First Name:'
-        ),
         React.createElement('input', { id: 'firstName', type: 'text', name: 'firstName', placeholder: 'first name' }),
-        React.createElement(
-            'label',
-            { htmlFor: 'lastName' },
-            'Last Name:'
-        ),
         React.createElement('input', { id: 'lastName', type: 'text', name: 'lastName', placeholder: 'last name' }),
         React.createElement(
             'label',
@@ -125,16 +91,15 @@ var SignUpWindow = function SignUpWindow(props) {
         ),
         React.createElement('input', { type: 'number', min: '0', max: '99999', name: 'zip', placeholder: '12345' }),
         React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
-        React.createElement('input', { type: 'submit', className: 'formSubmit', value: 'Sign in' }),
+        React.createElement('input', { type: 'submit', className: 'formSubmit buttonPadding', value: 'Create Account' }),
         React.createElement(
-            'span',
-            { onClick: function onClick() {
-                    return createLoginWindow(props.csrf);
-                } },
+            'p',
+            { className: 'small' },
+            'Oops, I already have an account ',
             React.createElement(
-                'p',
-                null,
-                'Oops, I already have an account take me back to the login page.'
+                'a',
+                { href: '/' },
+                'take me back to the login page.'
             )
         )
     );

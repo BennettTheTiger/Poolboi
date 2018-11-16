@@ -375,10 +375,13 @@ var WaterTestView = function WaterTestView(props) {
 
 var WaterView = function WaterView(props) {
 
-    console.log(JSON.stringify(props.bodies));
-    sendAjax('GET', '/addWater', { water: props.bodies }, function (success) {
-        console.dir(success);
+    var allSamples = [];
+    props.bodies.forEach(function (body) {
+        sendAjax('GET', '/addWater', body, function (success) {
+            console.dir(success);
+        });
     });
+    console.dir(allSamples);
 
     var allBodies = props.bodies.map(function (water) {
         return React.createElement(WaterBodyView, { body: water });
@@ -401,6 +404,8 @@ var WaterView = function WaterView(props) {
             ' a pool or spa.'
         );
     }
+
+    //allTests = <h5 className="col-sm-8 text-center">Lets <a href="/newWaterBody">add</a> a test.</h5>
     return React.createElement(
         'div',
         null,
@@ -439,17 +444,7 @@ var WaterView = function WaterView(props) {
             React.createElement(
                 'div',
                 { className: 'row' },
-                React.createElement(
-                    'h5',
-                    { className: 'col-sm-8 text-center' },
-                    'Lets ',
-                    React.createElement(
-                        'a',
-                        { href: '/newWaterBody' },
-                        'add'
-                    ),
-                    ' a test.'
-                )
+                React.createElement(WaterTestView, null)
             )
         )
     );
