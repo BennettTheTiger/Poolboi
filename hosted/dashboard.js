@@ -376,34 +376,44 @@ var WaterTestView = function WaterTestView(props) {
 var WaterView = function WaterView(props) {
     var allData = [];
 
-    var addWater = function addWater(newData) {
-        return allData.push(newData);
+    //async call to get data takes a water body object
+    var asyncGetData = function asyncGetData(item) {
+        var promiseObj = new Promise(function (resolve, reject) {
+            sendAjax('GET', '/addWater', item, function (data) {
+                console.dir(data);
+                if (data) resolve(data);else reject({ error: 'No data was found' });
+            });
+        });
+        return promiseObj;
     };
 
-    var fetchWater = function fetchWater(bodies) {
-        return new Promise(function (resolve, reject) {
-            bodies.forEach(function (item) {
-                sendAjax('GET', '/addWater', item, function (data) {
-                    console.dir(data);
-                    addWater(data);
-                });
-            }); //data request
-            resolve;
-        }); //promise wrapper
-    }; //function data call
+    //loop over each water body and get data
+    var getAllSamples = function getAllSamples() {
+        var fetchWater = new Promise(function (resolve, reject) {
+            props.bodies.forEach(function (item) {
+                asyncGetData(item).then(function (dataReturned, error) {
+                    console.log('done fetching water');
+                    allData.push(dataReturned);
+                    if (error) {
+                        console.log(error);
+                    }
+                }).then(console.log('Done data digging'));
+            }); //end for loop
+            resolve();
+        });
+        return fetchWater;
+    };
 
-
-    fetchWater(props.bodies).then(console.dir(allData));
-
-    console.log(allData);
+    getAllSamples().then(function () {
+        console.log('Done getting sampels');
+        console.dir(allData);
+    });
 
     var allBodies = props.bodies.map(function (water) {
         return React.createElement(WaterBodyView, { body: water });
     });
 
-    var allTests = allData.map(function (sample) {
-        console.dir(sample);
-    });
+    var allTests = props.bodies.map(function (sample) {});
 
     if (props.bodies.length === 0) {
         allBodies = React.createElement(
@@ -458,8 +468,7 @@ var WaterView = function WaterView(props) {
             React.createElement(
                 'div',
                 { className: 'row' },
-                allTests,
-                React.createElement(WaterTestView, null)
+                allTests
             )
         )
     );

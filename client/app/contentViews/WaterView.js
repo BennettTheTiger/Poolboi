@@ -1,33 +1,53 @@
 const WaterView = (props) =>
 {
     let allData = [];
-    
-    const addWater = (newData) => allData.push(newData);
 
-    const fetchWater = (bodies) => {
-        return new Promise(function(resolve, reject){
-            bodies.forEach(item => {
-                sendAjax('GET', '/addWater', item, data =>{
-                    console.dir(data);
-                    addWater(data);
-                });
-            });//data request
-            resolve
-        });//promise wrapper
-    }//function data call
+    //async call to get data takes a water body object
+    const asyncGetData = (item) =>{
+        let promiseObj = new Promise(function(resolve, reject){
+            sendAjax('GET', '/addWater', item, data =>{
+                console.dir(data);
+                if(data) resolve(data);
+                else reject({error:'No data was found'});
+            });
+        });
+        return promiseObj;
+    }
+
+    //loop over each water body and get data
+    const getAllSamples = () =>{
+        let fetchWater = new Promise(function(resolve,reject){
+                props.bodies.forEach(item => {
+                    asyncGetData(item).then((dataReturned,error)=>{
+                        console.log('done fetching water');
+                        allData.push(dataReturned);
+                        if(error){
+                            console.log(error);
+                        }
+                    }).then(console.log('Done data digging'))   
+                });//end for loop
+                resolve();      
+        });
+        return fetchWater;
+    }    
     
-    //Keeps resolving prematurely
-    fetchWater(props.bodies).then(console.dir(allData));
-    
-    console.log(allData);
+    getAllSamples().then(()=>{
+        console.log('Done getting samples');
+        console.dir(allData);
+    });
+
+
 
     let allBodies =  props.bodies.map((water) => {
                         return  <WaterBodyView body={water}/>
                     });
 
-    let allTests = allData.map((sample) => {
-        console.dir(sample);
+    let allTests = props.bodies.map((sample)=>{
+       
     })
+
+    
+    
 
 
 
@@ -48,7 +68,7 @@ const WaterView = (props) =>
                 <h2 className="row">Test Results<a href="/newWaterTest"><PlusIcon/></a></h2>
                 <div className="row"> 
                     {allTests}
-                    <WaterTestView/>
+                    
                 </div>
             </section>
         </div>
