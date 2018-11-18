@@ -1,7 +1,5 @@
 const WaterView = (props) =>
 {
-    let allData = [];
-
     //async call to get data takes a water body object
     const asyncGetData = (item) =>{
         let promiseObj = new Promise(function(resolve, reject){
@@ -14,37 +12,23 @@ const WaterView = (props) =>
         return promiseObj;
     }
 
-    //loop over each water body and get data
-    const getAllSamples = () =>{
-        let fetchWater = new Promise(function(resolve,reject){
-                props.bodies.forEach(item => {
-                    asyncGetData(item).then((dataReturned,error)=>{
-                        console.log('done fetching water');
-                        allData.push(dataReturned);
-                        if(error){
-                            console.log(error);
-                        }
-                    }).then(console.log('Done data digging'))   
-                });//end for loop
-                resolve();      
-        });
-        return fetchWater;
-    }    
-    
-    getAllSamples().then(()=>{
-        console.log('Done getting samples');
-        console.dir(allData);
+    let gotWater = [];
+    //fill gotWater with promises for each water body from 
+    for(let i = 0; i < props.bodies.length; i++){
+        gotWater.push(asyncGetData(props.bodies[i]));
+    }
+
+    Promise.all(gotWater).then((data)=>{
+        console.log('got all water');
+        console.dir(data);
+  
     });
-
-
 
     let allBodies =  props.bodies.map((water) => {
                         return  <WaterBodyView body={water}/>
                     });
 
-    let allTests = props.bodies.map((sample)=>{
-       
-    })
+   
 
     
     
@@ -66,10 +50,8 @@ const WaterView = (props) =>
             </section>
             <section className="container-fluid">
                 <h2 className="row">Test Results<a href="/newWaterTest"><PlusIcon/></a></h2>
-                <div className="row"> 
-                    {allTests}
+                <section id="tableHere"></section>
                     
-                </div>
             </section>
         </div>
     );

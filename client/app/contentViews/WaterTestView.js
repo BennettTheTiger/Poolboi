@@ -1,10 +1,27 @@
 const WaterTestView = (props) => {
     
     return(
-        <div className="row">
-            <div className="col-xs-4">Name</div>
-            <div className="col-xs-4">Date</div>
-            <div className="col-xs-4"><button>View Test</button></div>
-        </div>
+        <table class="table table-striped container-fluid">
+            <thead>
+                <tr scope="row">
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Handle</th>
+                </tr>
+            </thead>
+            <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+            </tr>
+            <tr>
+                <th scope="row">1</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+            </tr>
+        </table>
     );
 }

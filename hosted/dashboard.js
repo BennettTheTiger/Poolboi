@@ -348,25 +348,82 @@ var WaterBodyView = function WaterBodyView(props) {
 var WaterTestView = function WaterTestView(props) {
 
     return React.createElement(
-        "div",
-        { className: "row" },
+        "table",
+        { "class": "table table-striped container-fluid" },
         React.createElement(
-            "div",
-            { className: "col-xs-4" },
-            "Name"
-        ),
-        React.createElement(
-            "div",
-            { className: "col-xs-4" },
-            "Date"
-        ),
-        React.createElement(
-            "div",
-            { className: "col-xs-4" },
+            "thead",
+            null,
             React.createElement(
-                "button",
+                "tr",
+                { scope: "row" },
+                React.createElement(
+                    "th",
+                    { scope: "col" },
+                    "#"
+                ),
+                React.createElement(
+                    "th",
+                    { scope: "col" },
+                    "First"
+                ),
+                React.createElement(
+                    "th",
+                    { scope: "col" },
+                    "Last"
+                ),
+                React.createElement(
+                    "th",
+                    { scope: "col" },
+                    "Handle"
+                )
+            )
+        ),
+        React.createElement(
+            "tr",
+            null,
+            React.createElement(
+                "th",
+                { scope: "row" },
+                "1"
+            ),
+            React.createElement(
+                "td",
                 null,
-                "View Test"
+                "Mark"
+            ),
+            React.createElement(
+                "td",
+                null,
+                "Otto"
+            ),
+            React.createElement(
+                "td",
+                null,
+                "@mdo"
+            )
+        ),
+        React.createElement(
+            "tr",
+            null,
+            React.createElement(
+                "th",
+                { scope: "row" },
+                "1"
+            ),
+            React.createElement(
+                "td",
+                null,
+                "Mark"
+            ),
+            React.createElement(
+                "td",
+                null,
+                "Otto"
+            ),
+            React.createElement(
+                "td",
+                null,
+                "@mdo"
             )
         )
     );
@@ -374,8 +431,6 @@ var WaterTestView = function WaterTestView(props) {
 'use strict';
 
 var WaterView = function WaterView(props) {
-    var allData = [];
-
     //async call to get data takes a water body object
     var asyncGetData = function asyncGetData(item) {
         var promiseObj = new Promise(function (resolve, reject) {
@@ -387,33 +442,32 @@ var WaterView = function WaterView(props) {
         return promiseObj;
     };
 
-    //loop over each water body and get data
-    var getAllSamples = function getAllSamples() {
-        var fetchWater = new Promise(function (resolve, reject) {
-            props.bodies.forEach(function (item) {
-                asyncGetData(item).then(function (dataReturned, error) {
-                    console.log('done fetching water');
-                    allData.push(dataReturned);
-                    if (error) {
-                        console.log(error);
-                    }
-                }).then(console.log('Done data digging'));
-            }); //end for loop
-            resolve();
-        });
-        return fetchWater;
-    };
+    var gotWater = [];
+    //fill gotWater with promises for each water body from 
+    for (var i = 0; i < props.bodies.length; i++) {
+        gotWater.push(asyncGetData(props.bodies[i]));
+    }
 
-    getAllSamples().then(function () {
-        console.log('Done getting sampels');
-        console.dir(allData);
+    Promise.all(gotWater).then(function (data) {
+        console.log('got all water');
+        console.dir(data);
+        BuildTable();
     });
 
     var allBodies = props.bodies.map(function (water) {
         return React.createElement(WaterBodyView, { body: water });
     });
 
-    var allTests = props.bodies.map(function (sample) {});
+    var allTests = React.createElement('p', null);
+    var BuildTable = function BuildTable(data) {
+
+        allTests = React.createElement(
+            'p',
+            null,
+            'there'
+        );
+        document.querySelector('#tableHere').innerHTML(allTests);
+    };
 
     if (props.bodies.length === 0) {
         allBodies = React.createElement(
@@ -465,11 +519,7 @@ var WaterView = function WaterView(props) {
                     React.createElement(PlusIcon, null)
                 )
             ),
-            React.createElement(
-                'div',
-                { className: 'row' },
-                allTests
-            )
+            React.createElement('section', { id: 'tableHere' })
         )
     );
 };
