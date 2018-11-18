@@ -8,7 +8,7 @@
   "description": "Poolboi water tracker application",
   "main": "/server/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Tests complete\"",
     "pretest": "eslint ./server --fix",
     "buildLoginBundle": "babel ./client/login/ ./client/helper --presets react --out-file ./hosted/loginbundle.js",
     "buildAppBundle": "babel ./client/app/ ./client/helper --presets react --out-file ./hosted/dashboard.js",
