@@ -6,7 +6,7 @@ var DashNav = function DashNav(props) {
         { className: "dashNavContainer nav justify-content-center flex-column flex-sm-row" },
         React.createElement(
             "div",
-            { className: "nav-item nav-link" },
+            { className: "nav-item nav-link text-primary" },
             React.createElement(
                 "span",
                 { onClick: function onClick() {
@@ -17,7 +17,7 @@ var DashNav = function DashNav(props) {
         ),
         React.createElement(
             "div",
-            { className: "nav-item nav-link" },
+            { className: "nav-item nav-link text-primary" },
             React.createElement(
                 "span",
                 { onClick: function onClick() {
@@ -28,7 +28,7 @@ var DashNav = function DashNav(props) {
         ),
         React.createElement(
             "div",
-            { className: "nav-item nav-link" },
+            { className: "nav-item nav-link text-primary" },
             React.createElement(
                 "span",
                 { onClick: function onClick() {
@@ -81,14 +81,6 @@ window.onload = () =>{
 'use strict';
 
 var AccountView = function AccountView(props) {
-
-    //Convert Mongo Dbs ISO time to a readable time string
-    var readableDate = function readableDate(data) {
-        var dateString = String(props.account.createdDate);
-        dateString = dateString.slice(0, 10);
-        dateString = dateString.split("-");
-        return dateString[1] + '/' + dateString[2] + '/' + dateString[0];
-    };
 
     var updateZip = function updateZip() {
         console.log('updateZip');
@@ -245,34 +237,39 @@ var getAccount = function getAccount() {
 window.onload = function () {
   getAccount();
 };
-'use strict';
+"use strict";
 
 var MainView = function MainView(props) {
-    console.dir(props);
+    //console.dir(props);
     var uvWarning = void 0; //Warn the user if the UV index is above 5
     if (props.weather.currently.uvIndex > 5) uvWarning = 'Better wear some sunscreen!';
     return React.createElement(
-        'div',
+        "div",
         null,
         React.createElement(
-            'p',
+            "p",
             null,
-            'The current temperature is ',
+            "The current temperature is ",
             props.weather.currently.temperature
         ),
         React.createElement(
-            'p',
+            "p",
             null,
-            'Feels like ',
+            "Feels like ",
             props.weather.currently.apparentTemperature
         ),
         React.createElement(
-            'p',
+            "p",
             null,
-            'The current UV index is ',
+            "The current UV index is ",
             props.weather.currently.uvIndex,
-            '. ',
+            ". ",
             uvWarning
+        ),
+        React.createElement(
+            "p",
+            { className: "small" },
+            "Graphs and analytical data in next update."
         )
     );
 };
@@ -325,22 +322,12 @@ var WaterBodyView = function WaterBodyView(props) {
             'Water Health:'
         ),
         React.createElement(
-            'button',
-            null,
-            'View History'
-        ),
-        React.createElement(
             'p',
             { className: 'small' },
             'ID:',
             props.body._id
         ),
-        React.createElement('hr', null),
-        React.createElement(
-            'button',
-            { onClick: delteBody },
-            'Delete'
-        )
+        React.createElement('hr', null)
     );
 };
 "use strict";
@@ -349,180 +336,239 @@ var WaterTestView = function WaterTestView(props) {
 
     return React.createElement(
         "table",
-        { "class": "table table-striped container-fluid" },
+        { className: "table table-striped table-responsive" },
+        React.createElement(
+            "h3",
+            null,
+            props.bodyName
+        ),
         React.createElement(
             "thead",
             null,
             React.createElement(
                 "tr",
-                { scope: "row" },
+                null,
                 React.createElement(
                     "th",
-                    { scope: "col" },
-                    "#"
+                    { scope: "col-xs-3" },
+                    "Date"
                 ),
                 React.createElement(
                     "th",
-                    { scope: "col" },
-                    "First"
+                    { scope: "col-xs-2" },
+                    "Alkalinity"
                 ),
                 React.createElement(
                     "th",
-                    { scope: "col" },
-                    "Last"
+                    { scope: "col-xs-1" },
+                    "cAcid"
                 ),
                 React.createElement(
                     "th",
-                    { scope: "col" },
-                    "Handle"
+                    { scope: "col-xs-2" },
+                    "Chlorine"
+                ),
+                React.createElement(
+                    "th",
+                    { scope: "col-xs-2" },
+                    "Free Chlorine"
+                ),
+                React.createElement(
+                    "th",
+                    { scope: "col-xs-1" },
+                    "Hardness"
+                ),
+                React.createElement(
+                    "th",
+                    { scope: "col-xs-1" },
+                    "PH"
                 )
             )
         ),
         React.createElement(
-            "tr",
+            "tbody",
             null,
-            React.createElement(
-                "th",
-                { scope: "row" },
-                "1"
-            ),
-            React.createElement(
-                "td",
-                null,
-                "Mark"
-            ),
-            React.createElement(
-                "td",
-                null,
-                "Otto"
-            ),
-            React.createElement(
-                "td",
-                null,
-                "@mdo"
-            )
-        ),
-        React.createElement(
-            "tr",
-            null,
-            React.createElement(
-                "th",
-                { scope: "row" },
-                "1"
-            ),
-            React.createElement(
-                "td",
-                null,
-                "Mark"
-            ),
-            React.createElement(
-                "td",
-                null,
-                "Otto"
-            ),
-            React.createElement(
-                "td",
-                null,
-                "@mdo"
-            )
+            props.sample.map(function (sam) {
+                console.dir(sam);
+                return React.createElement(
+                    "tr",
+                    null,
+                    React.createElement(
+                        "td",
+                        null,
+                        readableDate(sam.date)
+                    ),
+                    React.createElement(
+                        "td",
+                        null,
+                        sam.alkalinity
+                    ),
+                    React.createElement(
+                        "td",
+                        null,
+                        sam.cAcid
+                    ),
+                    React.createElement(
+                        "td",
+                        null,
+                        sam.chlorine
+                    ),
+                    React.createElement(
+                        "td",
+                        null,
+                        sam.freeChlorine
+                    ),
+                    React.createElement(
+                        "td",
+                        null,
+                        sam.hardness
+                    ),
+                    React.createElement(
+                        "td",
+                        null,
+                        sam.ph
+                    )
+                );
+            })
         )
     );
 };
 'use strict';
 
-var WaterView = function WaterView(props) {
-    //async call to get data takes a water body object
-    var asyncGetData = function asyncGetData(item) {
-        var promiseObj = new Promise(function (resolve, reject) {
-            sendAjax('GET', '/addWater', item, function (data) {
-                console.dir(data);
-                if (data) resolve(data);else reject({ error: 'No data was found' });
-            });
-        });
-        return promiseObj;
-    };
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-    var gotWater = [];
-    //fill gotWater with promises for each water body from 
-    for (var i = 0; i < props.bodies.length; i++) {
-        gotWater.push(asyncGetData(props.bodies[i]));
-    }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-    Promise.all(gotWater).then(function (data) {
-        console.log('got all water');
-        console.dir(data);
-        BuildTable();
-    });
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-    var allBodies = props.bodies.map(function (water) {
-        return React.createElement(WaterBodyView, { body: water });
-    });
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-    var allTests = React.createElement('p', null);
-    var BuildTable = function BuildTable(data) {
+var WaterView = function (_React$Component) {
+    _inherits(WaterView, _React$Component);
 
-        allTests = React.createElement(
-            'p',
-            null,
-            'there'
-        );
-        document.querySelector('#tableHere').innerHTML(allTests);
-    };
+    function WaterView(props) {
+        _classCallCheck(this, WaterView);
 
-    if (props.bodies.length === 0) {
-        allBodies = React.createElement(
-            'h5',
-            { className: 'col-sm-8 text-center' },
-            'Lets ',
-            React.createElement(
-                'a',
-                { href: '/newWaterBody' },
-                'add'
+        var _this = _possibleConstructorReturn(this, (WaterView.__proto__ || Object.getPrototypeOf(WaterView)).call(this, props));
+
+        _this.state = {
+            waterTable: React.createElement(
+                'h4',
+                null,
+                'No Data Yet'
             ),
-            ' a pool or spa.'
-        );
-    }
-
-    //allTests = <h5 className="col-sm-8 text-center">Lets <a href="/newWaterBody">add</a> a test.</h5>
-    return React.createElement(
-        'div',
-        null,
-        React.createElement(
-            'section',
-            { className: 'container-fluid' },
-            React.createElement(
-                'h2',
-                { className: 'row' },
-                'My Water',
-                React.createElement(
-                    'a',
-                    { href: '/newWaterBody' },
-                    React.createElement(PlusIcon, null)
-                )
-            ),
-            React.createElement(
-                'div',
-                { className: 'row' },
-                allBodies
+            allBodies: React.createElement(
+                'h4',
+                null,
+                'No'
             )
-        ),
-        React.createElement(
-            'section',
-            { className: 'container-fluid' },
-            React.createElement(
-                'h2',
-                { className: 'row' },
-                'Test Results',
+        };
+        return _this;
+    }
+
+    _createClass(WaterView, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this2 = this;
+
+            //async call to get data takes a water body object
+            var asyncGetData = function asyncGetData(item) {
+                var promiseObj = new Promise(function (resolve, reject) {
+                    sendAjax('GET', '/addWater', item, function (data) {
+                        if (data) resolve(data);else reject({ error: 'No data was found' });
+                    });
+                });
+                return promiseObj;
+            };
+
+            var gotWater = [];
+            //fill gotWater with promises for each water bodies data
+            for (var i = 0; i < this.props.bodies.length; i++) {
+                gotWater.push(asyncGetData(this.props.bodies[i]));
+            }
+
+            //Waits for all water sample data to be fetched
+            Promise.all(gotWater).then(function (data) {
+                buildTable(data);
+            });
+
+            var buildTable = function buildTable(data) {
+                var index = 0;
+                var subTables = [];
+                data.forEach(function (sample) {
+                    var name = _this2.props.bodies[index].name;
+                    index++;
+                    subTables.push(React.createElement(WaterTestView, { sample: sample, bodyName: name }));
+                });
+                _this2.setState({ waterTable: subTables });
+            };
+
+            var allBodies = this.props.bodies.map(function (water) {
+                return React.createElement(WaterBodyView, { body: water });
+            });
+            this.setState({ allBodies: allBodies });
+
+            if (this.props.bodies.length === 0) {
+                this.setState({ allBodies: React.createElement(
+                        'h5',
+                        { className: 'col-sm-8 text-center' },
+                        'Lets ',
+                        React.createElement(
+                            'a',
+                            { href: '/newWaterBody' },
+                            'add'
+                        ),
+                        ' a pool or spa.'
+                    ) });
+            }
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            //allTests = <h5 className="col-sm-8 text-center">Lets <a href="/newWaterBody">add</a> a test.</h5>
+            return React.createElement(
+                'div',
+                null,
                 React.createElement(
-                    'a',
-                    { href: '/newWaterTest' },
-                    React.createElement(PlusIcon, null)
+                    'section',
+                    { className: 'container-fluid' },
+                    React.createElement(
+                        'h2',
+                        { className: 'row' },
+                        'My Water',
+                        React.createElement(
+                            'a',
+                            { href: '/newWaterBody' },
+                            React.createElement(PlusIcon, null)
+                        )
+                    ),
+                    React.createElement(
+                        'div',
+                        { className: 'row' },
+                        this.state.allBodies
+                    )
+                ),
+                React.createElement(
+                    'section',
+                    { className: 'container-fluid' },
+                    React.createElement(
+                        'h2',
+                        { className: 'row' },
+                        'Test Results',
+                        React.createElement(
+                            'a',
+                            { href: '/newWaterTest' },
+                            React.createElement(PlusIcon, null)
+                        )
+                    ),
+                    this.state.waterTable
                 )
-            ),
-            React.createElement('section', { id: 'tableHere' })
-        )
-    );
-};
+            );
+        }
+    }]);
+
+    return WaterView;
+}(React.Component);
 "use strict";
 "use strict";
 
@@ -549,4 +595,12 @@ var sendAjax = function sendAjax(type, action, data, success) {
             handleError(msgObject.error);
         }
     });
+};
+
+//Convert Mongo Dbs ISO time to a readable time string
+var readableDate = function readableDate(data) {
+    var dateString = String(data);
+    dateString = dateString.slice(0, 10);
+    dateString = dateString.split("-");
+    return dateString[1] + '/' + dateString[2] + '/' + dateString[0];
 };

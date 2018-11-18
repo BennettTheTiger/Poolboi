@@ -1,27 +1,38 @@
-const WaterTestView = (props) => {
-    
+const WaterTestView = (props) =>{
+
     return(
-        <table class="table table-striped container-fluid">
+        <table className="table table-striped table-responsive">
+            <h3>{props.bodyName}</h3>
             <thead>
-                <tr scope="row">
-                <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Handle</th>
+                <tr>
+                <th scope="col-xs-3">Date</th>
+                <th scope="col-xs-2">Alkalinity</th>
+                <th scope="col-xs-1">cAcid</th>
+                <th scope="col-xs-2">Chlorine</th>
+                <th scope="col-xs-2">Free Chlorine</th>
+                <th scope="col-xs-1">Hardness</th>
+                <th scope="col-xs-1">PH</th>
                 </tr>
             </thead>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-            </tr>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-            </tr>
+            <tbody>
+                {
+                    props.sample.map(sam =>{
+                        console.dir(sam);
+                        return(
+                        <tr>
+                            <td>{readableDate(sam.date)}</td>
+                            <td>{sam.alkalinity}</td>
+                            <td>{sam.cAcid}</td>
+                            <td>{sam.chlorine}</td>
+                            <td>{sam.freeChlorine}</td>
+                            <td>{sam.hardness}</td>
+                            <td>{sam.ph}</td>
+                        </tr>
+                        );
+                    })
+                }
+
+            </tbody>
         </table>
     );
 }

@@ -1,14 +1,6 @@
 
 const AccountView = (props) => {
 
-    //Convert Mongo Dbs ISO time to a readable time string
-    const readableDate = (data) => {
-    let dateString = String(props.account.createdDate);
-    dateString = dateString.slice(0,10);
-    dateString = dateString.split("-");
-    return (dateString[1] + '/' + dateString[2] + '/' + dateString[0]);
-    }
-
     const updateZip = () =>{
         console.log('updateZip');
     }

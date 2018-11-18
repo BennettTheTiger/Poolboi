@@ -16,10 +16,14 @@ const WaterBodyView = (props) =>
                 <p>Location:{props.body.zipCode}</p>
                 <p>Type:{type}</p>
                 <p>Water Health:</p>
+                {/*
                 <button>View History</button>
+                */}
                 <p className="small">ID:{props.body._id}</p>
                 <hr/>
+                {/*
                 <button onClick={delteBody}>Delete</button>
+                */}
             </div>
        
     );

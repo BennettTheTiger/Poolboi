@@ -22,3 +22,11 @@ const sendAjax = (type, action, data, success) => {
         },
     });
 };
+
+//Convert Mongo Dbs ISO time to a readable time string
+const readableDate = (data) => {
+    let dateString = String(data);
+    dateString = dateString.slice(0,10);
+    dateString = dateString.split("-");
+    return (dateString[1] + '/' + dateString[2] + '/' + dateString[0]);
+}
