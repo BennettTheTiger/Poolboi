@@ -7,12 +7,12 @@ var handleSignUp = function handleSignUp(e) {
     e.preventDefault();
 
     if ($("#user").val() == '' || $("#pass").val() == '' || $('#pass2').val() == '') {
-        console.log('RAWR ALL FIELDS ARE REQUIRED!!!');
+        window.alert('Oops ALL FIELDS ARE REQUIRED!!!');
         return false;
     }
 
     if ($('#pass').val() !== $('#pass2').val()) {
-        console.log('RAwR passwords dont match');
+        console.log('Darn... Your passwords dont match');
         return false;
     }
 
@@ -49,10 +49,10 @@ var LoginWindow = function LoginWindow(props) {
             React.createElement('input', { id: 'pass', type: 'password', name: 'pass', placeholder: 'password' }),
             React.createElement('br', null),
             React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
-            React.createElement('input', { type: 'submit', className: 'buttonPadding', onClick: function onClick() {
+            React.createElement('input', { type: 'submit', className: 'buttonPadding btn btn-primary', onClick: function onClick() {
                     createSignupWindow(props.csrf);
                 }, value: 'Sign Up' }),
-            React.createElement('input', { type: 'submit', className: 'formSubmit buttonPadding', value: 'Sign in' })
+            React.createElement('input', { type: 'submit', className: 'formSubmit buttonPadding btn btn-success', value: 'Sign in' })
         ),
         React.createElement(
             'a',
@@ -87,7 +87,7 @@ var SignUpWindow = function SignUpWindow(props) {
         React.createElement(
             'label',
             { htmlFor: 'zip' },
-            'Whats your zip code'
+            'zip code'
         ),
         React.createElement('input', { type: 'number', min: '0', max: '99999', name: 'zip', placeholder: '12345' }),
         React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
@@ -148,4 +148,12 @@ var sendAjax = function sendAjax(type, action, data, success) {
             handleError(msgObject.error);
         }
     });
+};
+
+//Convert Mongo Dbs ISO time to a readable time string
+var readableDate = function readableDate(data) {
+    var dateString = String(data);
+    dateString = dateString.slice(0, 10);
+    dateString = dateString.split("-");
+    return dateString[1] + '/' + dateString[2] + '/' + dateString[0];
 };

@@ -5,7 +5,7 @@ class Dashboard extends React.Component {
         super(props);
         this.state = {
             userData: {username:'UserName'},//placeholder replaced on page load
-            mainContent: <MainView weather={props.weather}/>,
+            mainContent: <MainView weather={props.weather} bodies={props.bodies}/>,
         };
 
         this.changeContent = this.changeContent.bind(this);

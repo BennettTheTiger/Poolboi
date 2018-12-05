@@ -196,7 +196,7 @@ var AddBody = function (_React$Component) {
                 { className: "container-fluid" },
                 React.createElement(
                     "h2",
-                    null,
+                    { className: "text-center" },
                     "Add a new body of water"
                 ),
                 React.createElement(
@@ -302,7 +302,7 @@ var AddBody = function (_React$Component) {
                         React.createElement("textarea", { className: "form-control", id: "bodyNotes", rows: "3", defaultValue: "" })
                     ),
                     React.createElement("input", { id: "csrfToken", type: "hidden", name: "_csrf", value: this.props.csrf }),
-                    React.createElement("input", { type: "submit", value: 'Add New ' + this.state.water })
+                    React.createElement("input", { type: "submit", value: 'Add New ' + this.state.water, className: "btn-success btn-block btn" })
                 )
             );
         }
@@ -355,4 +355,12 @@ var sendAjax = function sendAjax(type, action, data, success) {
             handleError(msgObject.error);
         }
     });
+};
+
+//Convert Mongo Dbs ISO time to a readable time string
+var readableDate = function readableDate(data) {
+    var dateString = String(data);
+    dateString = dateString.slice(0, 10);
+    dateString = dateString.split("-");
+    return dateString[1] + '/' + dateString[2] + '/' + dateString[0];
 };

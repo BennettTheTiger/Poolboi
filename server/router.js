@@ -35,6 +35,7 @@ const router = (app) => {
   app.get('/addWater', mid.requiresLogin, mid.requiresSecure, controllers.WaterSample.getSamples);
   // error handling
   app.get('/error', (req, res) => { res.render('error', { msg: req.body }); });
+  app.get('/badzip', (req, res) => { res.render('error', { msg: 'Failed - Invalid Zip Code' }); });
   app.get('*',
   (req, res) => { res.render('error', { msg: 'The page you are looking was not found' }); });
 };

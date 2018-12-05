@@ -3,7 +3,7 @@ const WaterTestView = (props) =>{
     return(
         <table className="table table-striped table-responsive">
             <h3>{props.bodyName}</h3>
-            <thead>
+            <thead style={{width:'100%'}}>
                 <tr>
                 <th scope="col-xs-3">Date</th>
                 <th scope="col-xs-2">Alkalinity</th>
@@ -14,7 +14,7 @@ const WaterTestView = (props) =>{
                 <th scope="col-xs-1">PH</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody style={{width:'100%'}}>
                 {
                     props.sample.map(sam =>{
                         console.dir(sam);

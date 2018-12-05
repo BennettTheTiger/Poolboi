@@ -139,7 +139,7 @@ class AddBody extends React.Component {
     render(){
     return(
         <div className="container-fluid">
-            <h2>Add a new body of water</h2>
+            <h2 className="text-center">Add a new body of water</h2>
             <form id="waterBody" 
                  onSubmit={this.makeWaterBody}
                  name="waterBodyForm"
@@ -185,7 +185,7 @@ class AddBody extends React.Component {
                 <textarea className="form-control" id="bodyNotes" rows="3" defaultValue=""></textarea>
             </div>
             <input id="csrfToken" type="hidden" name="_csrf" value={this.props.csrf}></input>
-            <input type="submit" value={'Add New ' + this.state.water}></input>
+            <input type="submit" value={'Add New ' + this.state.water} className="btn-success btn-block btn"></input>
             </form>
         </div>
     );  

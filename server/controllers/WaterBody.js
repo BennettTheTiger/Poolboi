@@ -63,7 +63,16 @@ const removeBody = (request, response) => {
     return res.status(200).json({ Success: 'Deleted Body' });
   });
 };
+// finds the most recent sample based on a water body id
+const findRecent = (req, res) => WaterBody.WaterBodyModel.findRecent(req.body.id, (err) => {
+  if (err) {
+    console.log(err);
+    return res.status(400);
+  }
+  return res.status(200).json({ recentSample: 'test' });
+});
 
 module.exports.removeBody = removeBody;
 module.exports.getBodies = getBodies;
 module.exports.makeBody = makeBody;
+module.exports.findRecent = findRecent;

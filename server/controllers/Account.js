@@ -1,5 +1,5 @@
 const models = require('../models');
-
+const zipcode = require('zipcodes');
 const Account = models.Account;
 
 const loginPage = (req, res) => {
@@ -75,10 +75,13 @@ const signup = (request, response) => {
       accountData.lastName = req.body.lastName;
     }
 
-    if (req.body.zip) {
-      console.log(`zip as ${req.body.zip}`);
-      accountData.zip = req.body.zip;
+
+    console.log(`zip as ${req.body.zip}`);
+    if (zipcode.lookup(req.body.zip) === undefined) {
+      return res.json({ redirect: '/badzip' });
     }
+    accountData.zip = req.body.zip;
+
 
     const newAccount = new Account.AccountModel(accountData);
 
@@ -112,7 +115,7 @@ const updatePassword = (req, res) => {
         console.log(err);
         res.status(500).json({ msg: 'Unable to change your password' });
       }
-      res.status(200).json({ msg: 'password set' });
+      res.status(200).json({ redirect: '/error' });
     });
   });
 };

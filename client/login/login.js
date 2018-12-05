@@ -7,12 +7,12 @@ const handleSignUp = (e) =>{
     e.preventDefault();
 
     if($("#user").val() == '' || $("#pass").val() == '' || $('#pass2').val() == ''){
-        console.log('RAWR ALL FIELDS ARE REQUIRED!!!');
+        window.alert('Oops ALL FIELDS ARE REQUIRED!!!');
         return false;
     }
 
     if($('#pass').val() !== $('#pass2').val()){
-        console.log('RAwR passwords dont match');
+        console.log('Darn... Your passwords dont match');
         return false;
     }
 
@@ -39,8 +39,8 @@ const LoginWindow = (props) => {
             <input id="pass" type="password" name="pass" placeholder="password"></input><br/>
             
             <input type="hidden" name="_csrf" value={props.csrf}></input>
-            <input type="submit" className="buttonPadding" onClick={()=>{createSignupWindow((props.csrf))}} value="Sign Up"></input>
-            <input type="submit" className="formSubmit buttonPadding" value="Sign in"></input>
+            <input type="submit" className="buttonPadding btn btn-primary" onClick={()=>{createSignupWindow((props.csrf))}} value="Sign Up"></input>
+            <input type="submit" className="formSubmit buttonPadding btn btn-success" value="Sign in"></input>
 
         </form>
         
@@ -72,7 +72,7 @@ const SignUpWindow = (props) => {
             
             <input id="firstName" type="text" name="firstName" placeholder="first name"></input>
             <input id="lastName" type="text" name="lastName" placeholder="last name"></input>
-            <label htmlFor="zip">Whats your zip code</label>
+            <label htmlFor="zip">zip code</label>
             <input type="number" min="0" max="99999" name="zip" placeholder="12345"/>
             
             <input type="hidden" name="_csrf" value={props.csrf}></input>

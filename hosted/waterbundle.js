@@ -72,13 +72,14 @@ var AddBody = function (_React$Component) {
                     body.name
                 );
             });
-
+            //pool test strip gradient array passed to water sliders
+            var gradient = ['-webkit-linear-gradient(left, #062193 0%,#2d3cac 26%,#4a33a0 50%,#79328e 72%,#79328e 100%)', '-webkit-linear-gradient(left, #fdfeaf 0%,#fdfeaf 20%,#b8d78d 50%,#91c378 72%,#3bab5b 100%)', '-webkit-linear-gradient(left, #fdfeaf 0%,#79328e 100%)', '-webkit-linear-gradient(left, #FAAE2A 0%,#D80823 100%)', '-webkit-linear-gradient(left, #E1C32F 0%,#1F525B 100%)', '-webkit-linear-gradient(left, #E38223 0%,#79328e 100%)'];
             return React.createElement(
                 'div',
-                { className: 'container-fluid' },
+                { className: 'container-fluid', style: { padding: '20px', position: 'relative' } },
                 React.createElement(
                     'h2',
-                    null,
+                    { className: 'text-center' },
                     'Add Water Test Results'
                 ),
                 React.createElement(
@@ -90,7 +91,7 @@ var AddBody = function (_React$Component) {
                         React.createElement(
                             'label',
                             { 'for': 'type' },
-                            'Water Type:'
+                            'Water Body:'
                         ),
                         React.createElement(
                             'select',
@@ -98,12 +99,12 @@ var AddBody = function (_React$Component) {
                             allOptions
                         )
                     ),
-                    React.createElement(WaterSlider, { title: 'Hardness', min: '0', max: '1000', step: '1', 'default': this.state.hardness, dataId: 'hardness', updateParent: this.FormChange }),
-                    React.createElement(WaterSlider, { title: 'Chlorine', min: '0', max: '10', step: '.1', 'default': this.state.chlorine, dataId: 'chlorine', updateParent: this.FormChange }),
-                    React.createElement(WaterSlider, { title: 'Free Chlorine', min: '0', max: '10', step: '.1', 'default': this.state.freeChlorine, dataId: 'freeChlorine', updateParent: this.FormChange }),
-                    React.createElement(WaterSlider, { title: 'PH', min: '6.2', max: '8.4', step: '.01', 'default': this.state.ph, dataId: 'ph', updateParent: this.FormChange }),
-                    React.createElement(WaterSlider, { title: 'Alkalinity', min: '0', max: '240', step: '1', 'default': this.state.alkalinity, dataId: 'alkalinity', updateParent: this.FormChange }),
-                    React.createElement(WaterSlider, { title: 'C Acid', min: '0', max: '300', step: '1', 'default': this.state.cAcid, dataId: 'cAcid', updateParent: this.FormChange }),
+                    React.createElement(WaterSlider, { title: 'Hardness', min: '0', max: '1000', step: '1', 'default': this.state.hardness, dataId: 'hardness', updateParent: this.FormChange, gradient: gradient[0] }),
+                    React.createElement(WaterSlider, { title: 'Chlorine', min: '0', max: '10', step: '.1', 'default': this.state.chlorine, dataId: 'chlorine', updateParent: this.FormChange, gradient: gradient[1] }),
+                    React.createElement(WaterSlider, { title: 'Free Chlorine', min: '0', max: '10', step: '.1', 'default': this.state.freeChlorine, dataId: 'freeChlorine', updateParent: this.FormChange, gradient: gradient[2] }),
+                    React.createElement(WaterSlider, { title: 'PH', min: '6.2', max: '8.4', step: '.01', 'default': this.state.ph, dataId: 'ph', updateParent: this.FormChange, gradient: gradient[3] }),
+                    React.createElement(WaterSlider, { title: 'Alkalinity', min: '0', max: '240', step: '1', 'default': this.state.alkalinity, dataId: 'alkalinity', updateParent: this.FormChange, gradient: gradient[4] }),
+                    React.createElement(WaterSlider, { title: 'C Acid', min: '0', max: '300', step: '1', 'default': this.state.cAcid, dataId: 'cAcid', updateParent: this.FormChange, gradient: gradient[5] }),
                     React.createElement('input', { id: 'csrfToken', type: 'hidden', name: '_csrf', value: this.props.csrf }),
                     React.createElement(
                         'div',
@@ -117,12 +118,12 @@ var AddBody = function (_React$Component) {
                     ),
                     React.createElement(
                         'button',
-                        { onClick: this.ClearData },
-                        'Clear Test Results'
+                        { onClick: this.ClearData, className: 'btn btn-danger' },
+                        'Clear'
                     ),
                     React.createElement(
                         'button',
-                        { onClick: this.SubmitData },
+                        { onClick: this.SubmitData, className: 'float-right btn-success btn' },
                         'Save Test Results'
                     )
                 )
@@ -175,7 +176,8 @@ var WaterSlider = function WaterSlider(props) {
             className: "form-control",
             onChange: props.updateParent,
             defaultValue: props.default,
-            name: props.dataId
+            name: props.dataId,
+            style: { background: props.gradient, '-webkit-appearance': 'none', height: '25px', outline: 'none' }
         })
     );
 };
@@ -204,4 +206,12 @@ var sendAjax = function sendAjax(type, action, data, success) {
             handleError(msgObject.error);
         }
     });
+};
+
+//Convert Mongo Dbs ISO time to a readable time string
+var readableDate = function readableDate(data) {
+    var dateString = String(data);
+    dateString = dateString.slice(0, 10);
+    dateString = dateString.split("-");
+    return dateString[1] + '/' + dateString[2] + '/' + dateString[0];
 };

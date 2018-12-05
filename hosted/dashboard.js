@@ -10,7 +10,7 @@ var DashNav = function DashNav(props) {
             React.createElement(
                 "span",
                 { onClick: function onClick() {
-                        return props.newContent(React.createElement(MainView, { weather: props.weather }));
+                        return props.newContent(React.createElement(MainView, { weather: props.weather, bodies: props.bodies }));
                     } },
                 "Overview"
             )
@@ -59,25 +59,165 @@ var DashNav = function DashNav(props) {
         React.createElement("hr", null)
     );
 };
-/*
-const createDashNav = (csrf) => {
-    ReactDOM.render(
-        <DashNav csrf = {csrf}/>, document.querySelector('#dashNav')
-    );
-};
-*/
+
 var getToken = function getToken() {
     sendAjax('GET', '/getToken', null, function (result) {
         createDashNav(result.csrfToken);
     });
 };
-/*
-onload getToken > setup > show login view
-window.onload = () =>{
-    //getToken();
-    createDashNav('fake');
-}
-*/
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Graph = function (_React$Component) {
+    _inherits(Graph, _React$Component);
+
+    function Graph() {
+        _classCallCheck(this, Graph);
+
+        return _possibleConstructorReturn(this, (Graph.__proto__ || Object.getPrototypeOf(Graph)).apply(this, arguments));
+    }
+
+    _createClass(Graph, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            var _this2 = this;
+
+            var canvas = this.refs.canvas;
+            var ctx = canvas.getContext("2d");
+
+            //async call to get data takes a water body object
+            var asyncGetData = function asyncGetData(body) {
+                sendAjax('GET', '/addWater', body, function (data) {
+                    if (data) cleanData(data);else {
+                        console.log('error No data was found');
+                    };
+                });
+            };
+
+            asyncGetData(this.props.body);
+
+            //make arrays for each field of data
+            var cleanData = function cleanData(allData) {
+                var pureData = {};
+                pureData.dates = [];
+                pureData.ph = [];
+                pureData.cAcid = [];
+                pureData.alkalinity = [];
+                pureData.chlorine = [];
+                pureData.freeChlorine = [];
+                pureData.hardness = [];
+                //push each samples data to the pure data field array
+                allData.map(function (e) {
+                    pureData.dates.push(readableDate(e.date));
+                    pureData.ph.push(e.ph);
+                    pureData.cAcid.push(e.cAcid);
+                    pureData.alkalinity.push(e.alkalinity);
+                    pureData.chlorine.push(e.chlorine);
+                    pureData.freeChlorine.push(e.freeChlorine);
+                    pureData.hardness.push(e.hardness);
+                });
+
+                _this2.buildChart(ctx, pureData);
+            };
+        }
+    }, {
+        key: 'buildChart',
+        value: function buildChart(ctx, data) {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.dates,
+                    datasets: [{
+                        label: 'Alkalinity',
+                        fill: false,
+                        data: data.alkalinity,
+                        borderColor: "Purple",
+                        yAxisID: 'A'
+                    }, {
+                        label: 'cAcid',
+                        fill: false,
+                        data: data.cAcid,
+                        borderColor: '#023f7c',
+                        yAxisID: 'A'
+                    }, {
+                        label: 'Free Chlorine',
+                        fill: false,
+                        data: data.freeChlorine,
+                        borderColor: '#83d4ea',
+                        yAxisID: 'B'
+                    }, {
+                        label: 'Chlorine',
+                        fill: false,
+                        data: data.chlorine,
+                        borderColor: 'Blue',
+                        yAxisID: 'B'
+                    }, {
+                        yAxisID: 'B',
+                        label: 'PH',
+                        fill: false,
+                        data: data.ph,
+                        borderColor: '#e98338'
+
+                    }, {
+                        label: 'Hardness',
+                        fill: false,
+                        data: data.hardness,
+                        borderColor: 'tan',
+                        yAxisID: 'A'
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            id: 'A',
+                            type: 'linear',
+                            position: 'left',
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }, {
+                            id: 'B',
+                            type: 'linear',
+                            position: 'right',
+                            ticks: {
+                                max: 10,
+                                min: 0
+                            }
+                        }]
+                    },
+                    elements: {
+                        line: {
+                            tension: .1 // disables bezier curves
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: this.props.body.name,
+                        fontSize: 35
+                    }
+                }
+            });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return React.createElement(
+                'div',
+                null,
+                React.createElement('canvas', { ref: 'canvas', width: 640, height: 425 })
+            );
+        }
+    }]);
+
+    return Graph;
+}(React.Component);
 'use strict';
 
 var AccountView = function AccountView(props) {
@@ -92,10 +232,10 @@ var AccountView = function AccountView(props) {
 
     return React.createElement(
         'div',
-        null,
+        { className: 'container-fluid row' },
         React.createElement(
             'div',
-            null,
+            { className: 'col-sm-6' },
             React.createElement(
                 'h4',
                 null,
@@ -117,6 +257,22 @@ var AccountView = function AccountView(props) {
             React.createElement(
                 'p',
                 null,
+                'Zip Code:',
+                props.account.zip
+            ),
+            React.createElement(
+                'p',
+                null,
+                'Account Id: ',
+                props.account._id
+            )
+        ),
+        React.createElement(
+            'div',
+            { className: 'col-sm-6' },
+            React.createElement(
+                'p',
+                null,
                 'Member Since: ',
                 readableDate(props.account.createdDate)
             ),
@@ -127,25 +283,14 @@ var AccountView = function AccountView(props) {
                 readableDate(props.account.lastSignedIn)
             ),
             React.createElement(
-                'p',
-                null,
-                'Zip Code:',
-                props.account.zip
-            ),
-            React.createElement(
-                'p',
-                null,
-                'Account Id: ',
-                props.account._id
-            ),
-            React.createElement(
                 'button',
-                { onClick: updateZip, disabled: true },
+                { onClick: updateZip, disabled: true, className: 'btn btn-warning disabled' },
                 'Change Zip'
             ),
+            React.createElement('br', null),
             React.createElement(
                 'button',
-                { onClick: updatePassword },
+                { onClick: updatePassword, className: 'btn btn-warning' },
                 'Change Password'
             )
         )
@@ -171,7 +316,7 @@ var Dashboard = function (_React$Component) {
 
     _this.state = {
       userData: { username: 'UserName' }, //placeholder replaced on page load
-      mainContent: React.createElement(MainView, { weather: props.weather })
+      mainContent: React.createElement(MainView, { weather: props.weather, bodies: props.bodies })
     };
 
     _this.changeContent = _this.changeContent.bind(_this);
@@ -237,40 +382,39 @@ var getAccount = function getAccount() {
 window.onload = function () {
   getAccount();
 };
-"use strict";
+'use strict';
 
 var MainView = function MainView(props) {
-    //console.dir(props);
     var uvWarning = void 0; //Warn the user if the UV index is above 5
     if (props.weather.currently.uvIndex > 5) uvWarning = 'Better wear some sunscreen!';
     return React.createElement(
-        "div",
+        'div',
         null,
         React.createElement(
-            "p",
+            'p',
             null,
-            "The current temperature is ",
+            'The current temperature is ',
             props.weather.currently.temperature
         ),
         React.createElement(
-            "p",
+            'p',
             null,
-            "Feels like ",
+            'Feels like ',
             props.weather.currently.apparentTemperature
         ),
         React.createElement(
-            "p",
+            'p',
             null,
-            "The current UV index is ",
+            'The current UV index is ',
             props.weather.currently.uvIndex,
-            ". ",
+            '. ',
             uvWarning
         ),
-        React.createElement(
-            "p",
-            { className: "small" },
-            "Graphs and analytical data in next update."
-        )
+
+        //Dynamically build a graph for each body of water
+        props.bodies.map(function (bod) {
+            return React.createElement(Graph, { body: bod });
+        })
     );
 };
 "use strict";
@@ -330,6 +474,60 @@ var WaterBodyView = function WaterBodyView(props) {
         React.createElement('hr', null)
     );
 };
+
+/*
+
+const WaterGraph = (props) =>{
+    // Load Charts and the corechart package.
+    google.charts.load('current', {'packages':['corechart']});
+
+    google.charts.setOnLoadCallback(drawBodyChart);
+    
+    let chartDiv = <div></div>
+    
+    const drawBodyChart = () => {
+        let data = new google.visualization.DataTable();//serves as a data model
+        data.addColumn('number', 'Date');
+        data.addColumn('number', 'alkalinity');
+        data.addColumn('number', 'cAcid');
+        data.addColumn('number', 'chlorine');
+        data.addColumn('number', 'freeChlorine');
+        data.addColumn('number', 'hardness');
+        data.addColumn('number', 'ph');
+
+        //data.addRows([[sample data],[sample data]])
+        data.addRows([
+            [123,21,32,21,321,321,3221],
+            [131,54,13,12,321,321,123]
+        ]);
+        let options = {
+            chart: {
+              title: 'Pool Name',
+            },
+            width: '100%',
+            height: 500,
+            axes: {
+              x: {
+                0: {side: 'top'}
+              }
+            }
+        };
+
+        let chart = new google.charts.Line(chartDiv);
+
+        chart.draw(data, google.charts.Line.convertOptions(options));
+    }
+    
+    
+    
+    return(
+        <div>
+            {chartDiv}
+        </div>
+    )
+}
+*/
+"use strict";
 "use strict";
 
 var WaterTestView = function WaterTestView(props) {
@@ -344,7 +542,7 @@ var WaterTestView = function WaterTestView(props) {
         ),
         React.createElement(
             "thead",
-            null,
+            { style: { width: '100%' } },
             React.createElement(
                 "tr",
                 null,
@@ -387,7 +585,7 @@ var WaterTestView = function WaterTestView(props) {
         ),
         React.createElement(
             "tbody",
-            null,
+            { style: { width: '100%' } },
             props.sample.map(function (sam) {
                 console.dir(sam);
                 return React.createElement(
@@ -492,6 +690,7 @@ var WaterView = function (_React$Component) {
                 buildTable(data);
             });
 
+            //builds tables from the water test data for each body of water
             var buildTable = function buildTable(data) {
                 var index = 0;
                 var subTables = [];

@@ -70,6 +70,11 @@ WaterSampleSchema.statics.findByBody = (bodyId, callback) => {
   return WaterSampleModel.find({ waterBody: bodyId }).exec(callback);
 };
 
+WaterSampleSchema.statics.findRecent = (bodyId, callback) => {
+  console.log(`looking for water with owner id ${bodyId}`);
+  return WaterSampleModel.findOne({ waterBody: bodyId }).exec(callback);
+};
+
 // Delete a water sample by its id
 WaterSampleSchema.statics.removeSample = (sampleId, callback) => {
   const id = {

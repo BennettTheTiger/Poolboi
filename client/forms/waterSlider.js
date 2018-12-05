@@ -11,6 +11,7 @@ const WaterSlider = (props) => {
                         onChange={props.updateParent} 
                         defaultValue={props.default}
                         name={props.dataId}
+                        style={{background:props.gradient,'-webkit-appearance':'none',height:'25px',outline:'none'}}
                     />
             </div>
         );

@@ -6,6 +6,11 @@ const zipcode = require('zipcodes');
 // gets the current weather for a zipcode
 const getWeather = (req, res) => {
   const location = zipcode.lookup(req.session.account.zip);
+  // if there is weather info stored on the session return that
+  if (req.session.weather) {
+    console.log('found weather in session');
+    return res.json(req.session.weather);
+  }
   darksky
     .options({
       latitude: location.latitude,
@@ -15,8 +20,12 @@ const getWeather = (req, res) => {
     })
     .exclude('minutely,hourly,daily,alerts,flags')
     .get()
-    .then((data) => res.json(data));
+    .then((data) => {
+      req.session.weather = data;// Not prefered
+      res.json(data);
+    });
 };
+
 
 const getForcast = (req, res) => {
   const location = zipcode.lookup(req.body.zip);
