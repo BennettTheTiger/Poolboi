@@ -1,0 +1,109 @@
+/*
+font-family: 'Montserrat', sans-serif;
+font-family: 'Maven Pro', sans-serif;
+*/
+
+.btn{
+    font-family: 'Maven Pro', sans-serif;
+    margin:10px;
+}
+
+#title{
+    font-family: 'Maven Pro', sans-serif;
+    color:#023f7c;
+}
+p{
+    font-family: 'Montserrat', sans-serif;
+    color:#023f7c;  
+}
+
+.btn-primary{
+    background-color: #e98338;
+    border: 0px;
+}
+
+.formSubmit{
+    background-color: #e98338;
+    border: 0px; 
+    color:#fff;
+}
+
+.btn-primary:hover{
+    background-color:#023f7c;
+}
+/* Nav Styles */
+.nav-link{
+    color:#e98338 !important;
+    font-family: 'Maven Pro', sans-serif;
+}
+
+.nav-link:hover{
+    text-decoration: underline;
+}
+
+.nav-link a{
+    color:#e98338;  
+}
+
+a{
+    color:#e98338;    
+}
+
+a:hover{
+    color:#023f7c;  
+    transition: ease-in .2s; 
+}
+/* Login Page Styles */
+h4{
+    font-family: 'Maven Pro', sans-serif;
+    color:#023f7c;  
+}
+
+#signupForm input{
+    margin: 10px;
+}
+
+#login{
+    background-color: #83d4ea;
+}
+
+#login:hover{
+    background-color: #023f7c;
+    transition: ease-in .2s;
+}
+
+/* Water View Styles */
+.tableTitle{
+    font-family: 'Maven Pro', sans-serif;
+    float: left;
+    color: #023f7c;
+    position: relative;
+}
+
+.eyeCon{
+    left:10px;
+    top:8px;
+    position: relative;
+    color:#e98338;    
+}
+
+.waterTitle{
+    font-family: 'Maven Pro', sans-serif; 
+}
+
+.accountBtn{
+    margin-top: 20px;
+}
+
+/* addWater form */
+
+.sliderTitle{
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+  
+ .collapse{
+     max-height: 300px;
+     overflow-y: scroll;
+ }

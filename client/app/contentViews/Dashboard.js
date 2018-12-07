@@ -1,5 +1,3 @@
-
-
 class Dashboard extends React.Component {
     constructor(props) {
         super(props);
@@ -26,8 +24,6 @@ class Dashboard extends React.Component {
         );
       }
 }
-
-
 
 const init = (data) => {  
   //get water bodies too  

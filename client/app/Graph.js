@@ -43,49 +43,55 @@ class Graph extends React.Component{
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: data.dates,
+                labels: data.dates.reverse(),//puts data in order from left to right
                 datasets: [
                     {
                         label: 'Alkalinity',
                         fill:false,
-                        data: data.alkalinity,
-                        borderColor: "Purple",
+                        data: data.alkalinity.reverse(),
+                        borderColor: "#7F0F7E",
+                        backgroundColor: "#7F0F7E",
                         yAxisID:'A',
                     },
                     {
                         label: 'cAcid',
                         fill:false,
-                        data: data.cAcid,
+                        data: data.cAcid.reverse(),
                         borderColor: '#023f7c',
+                        backgroundColor: '#023f7c',
                         yAxisID:'A',
                     },
                     {
                         label: 'Free Chlorine',
                         fill:false,
-                        data: data.freeChlorine,
+                        data: data.freeChlorine.reverse(),
                         borderColor: '#83d4ea',
+                        backgroundColor: '#83d4ea',
                         yAxisID:'B'
                     },
                     {
                         label: 'Chlorine',
                         fill:false,
-                        data: data.chlorine,
-                        borderColor: 'Blue',
+                        data: data.chlorine.reverse(),
+                        borderColor: '#3385ff',
+                        backgroundColor: '#3385ff',
                         yAxisID:'B',
                     },
                     {
                         yAxisID:'B',
                         label: 'PH',
                         fill:false,
-                        data: data.ph,
+                        data: data.ph.reverse(),
                         borderColor: '#e98338',
+                        backgroundColor: '#e98338',
                         
                     },
                     {
                         label: 'Hardness',
                         fill:false,
-                        data: data.hardness,
+                        data: data.hardness.reverse(),
                         borderColor: 'tan',
+                        backgroundColor: 'tan',
                         yAxisID:'A'
                     }
                 ]
@@ -110,7 +116,12 @@ class Graph extends React.Component{
                                 min:0,
                             }
                         },
-                    ]
+                    ],
+                    xAxes: {
+                        ticks:{
+                            reversed: true
+                        }
+                    },
                 },
                 elements: {
                     line: {
@@ -120,7 +131,9 @@ class Graph extends React.Component{
                 title:{
                     display:true,
                     text: this.props.body.name,
-                    fontSize:35,
+                    fontSize:40,
+                    fontFamily:'Maven Pro',
+                    fontColor:'#023f7c',
                 },
             }
         });

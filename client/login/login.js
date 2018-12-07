@@ -1,9 +1,13 @@
 const handleLogin = (e) =>{
-
+    e.preventDefault();
+    sendAjax('POST',$('#loginForm').attr("action"),$('#loginForm').serialize(), (result)=>{
+        if(result.error) window.alert(result.error);
+        if(result.success) window.location.href = result.success;
+    });
 }
 
 const handleSignUp = (e) =>{
-    console.log('making user');
+    //console.log('making user');
     e.preventDefault();
 
     if($("#user").val() == '' || $("#pass").val() == '' || $('#pass2').val() == ''){
@@ -12,7 +16,7 @@ const handleSignUp = (e) =>{
     }
 
     if($('#pass').val() !== $('#pass2').val()){
-        console.log('Darn... Your passwords dont match');
+        window.alert('Darn... Your passwords dont match');
         return false;
     }
 
@@ -40,7 +44,7 @@ const LoginWindow = (props) => {
             
             <input type="hidden" name="_csrf" value={props.csrf}></input>
             <input type="submit" className="buttonPadding btn btn-primary" onClick={()=>{createSignupWindow((props.csrf))}} value="Sign Up"></input>
-            <input type="submit" className="formSubmit buttonPadding btn btn-success" value="Sign in"></input>
+            <input id="login" type="submit" className="formSubmit buttonPadding btn btn-success" value="Sign In"></input>
 
         </form>
         
@@ -62,11 +66,11 @@ const SignUpWindow = (props) => {
             className = 'mainForm'
             >
             
-            <input id="user" type="text" name="username" placeholder="username"></input><i className="fas fa-info-circle" title="This is the user name that you will login with"></i>
+            <input id="user" type="text" name="username" placeholder="username"></input><i className="fas fa-info-circle" title="This is the user name that you will login with"></i><br/>
            
-            <input id="pass" type="password" name="pass" placeholder="password"></input>
+            <input id="pass" type="password" name="pass" placeholder="password"></input><br/>
             
-            <input id="pass2" type="password" name="pass2" placeholder="retype password"></input>
+            <input id="pass2" type="password" name="pass2" placeholder="retype password"></input><br/>
             
             <h4 className="buttonPadding">Help us get to know you, so we can better help you!</h4>
             
@@ -77,7 +81,7 @@ const SignUpWindow = (props) => {
             
             <input type="hidden" name="_csrf" value={props.csrf}></input>
 
-            <input type="submit" className="formSubmit buttonPadding" value="Create Account"></input>
+            <input type="submit" className="formSubmit btn buttonPadding" value="Create Account"></input>
 
             <p className="small" >Oops, I already have an account <a href="/">take me back to the login page.</a></p>
         </form>

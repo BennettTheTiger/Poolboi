@@ -52,9 +52,9 @@ class AddBody extends React.Component {
         ];
     return(
         <div className="container-fluid" style={{padding: '20px',position:'relative'}}>
-            <h2 className="text-center">Add Water Test Results</h2>
+            <h2 className="text-center" id="title">Add Water Test Results</h2>
             <form id="waterResult">
-            <div className="form-group">
+            <div className="form-group sliderTitle">
                 <label for="type">Water Body:</label>
                     <select name="body" className="form-control" id="type">
                         {allOptions}
@@ -68,12 +68,12 @@ class AddBody extends React.Component {
             <WaterSlider title="Alkalinity" min="0" max="240" step="1" default={this.state.alkalinity}  dataId="alkalinity" updateParent={this.FormChange} gradient={gradient[4]}/>
             <WaterSlider title="C Acid" min="0" max="300" step="1" default={this.state.cAcid} dataId="cAcid" updateParent={this.FormChange} gradient={gradient[5]}/>
             <input id="csrfToken" type="hidden" name="_csrf" value={this.props.csrf}></input>
-            <div className="form-group">
+            <div className="form-group sliderTitle">
                 <label for="notes">Notes:</label>
                 <textarea name="notes" className="form-control" id="notes" rows="3" placeholder="Add Notes Here"></textarea>
             </div>
             <button onClick={this.ClearData} className="btn btn-danger">Clear</button>
-            <button onClick={this.SubmitData} className="float-right btn-success btn">Save Test Results</button>
+            <button onClick={this.SubmitData} className="float-right btn-primary btn">Save Test Results</button>
             </form>
         </div>
     );  

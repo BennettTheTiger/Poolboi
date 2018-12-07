@@ -1,9 +1,15 @@
 'use strict';
 
-var handleLogin = function handleLogin(e) {};
+var handleLogin = function handleLogin(e) {
+    e.preventDefault();
+    sendAjax('POST', $('#loginForm').attr("action"), $('#loginForm').serialize(), function (result) {
+        if (result.error) window.alert(result.error);
+        if (result.success) window.location.href = result.success;
+    });
+};
 
 var handleSignUp = function handleSignUp(e) {
-    console.log('making user');
+    //console.log('making user');
     e.preventDefault();
 
     if ($("#user").val() == '' || $("#pass").val() == '' || $('#pass2').val() == '') {
@@ -12,7 +18,7 @@ var handleSignUp = function handleSignUp(e) {
     }
 
     if ($('#pass').val() !== $('#pass2').val()) {
-        console.log('Darn... Your passwords dont match');
+        window.alert('Darn... Your passwords dont match');
         return false;
     }
 
@@ -52,7 +58,7 @@ var LoginWindow = function LoginWindow(props) {
             React.createElement('input', { type: 'submit', className: 'buttonPadding btn btn-primary', onClick: function onClick() {
                     createSignupWindow(props.csrf);
                 }, value: 'Sign Up' }),
-            React.createElement('input', { type: 'submit', className: 'formSubmit buttonPadding btn btn-success', value: 'Sign in' })
+            React.createElement('input', { id: 'login', type: 'submit', className: 'formSubmit buttonPadding btn btn-success', value: 'Sign In' })
         ),
         React.createElement(
             'a',
@@ -75,8 +81,11 @@ var SignUpWindow = function SignUpWindow(props) {
         },
         React.createElement('input', { id: 'user', type: 'text', name: 'username', placeholder: 'username' }),
         React.createElement('i', { className: 'fas fa-info-circle', title: 'This is the user name that you will login with' }),
+        React.createElement('br', null),
         React.createElement('input', { id: 'pass', type: 'password', name: 'pass', placeholder: 'password' }),
+        React.createElement('br', null),
         React.createElement('input', { id: 'pass2', type: 'password', name: 'pass2', placeholder: 'retype password' }),
+        React.createElement('br', null),
         React.createElement(
             'h4',
             { className: 'buttonPadding' },
@@ -91,7 +100,7 @@ var SignUpWindow = function SignUpWindow(props) {
         ),
         React.createElement('input', { type: 'number', min: '0', max: '99999', name: 'zip', placeholder: '12345' }),
         React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
-        React.createElement('input', { type: 'submit', className: 'formSubmit buttonPadding', value: 'Create Account' }),
+        React.createElement('input', { type: 'submit', className: 'formSubmit btn buttonPadding', value: 'Create Account' }),
         React.createElement(
             'p',
             { className: 'small' },

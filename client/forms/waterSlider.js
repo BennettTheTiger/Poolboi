@@ -2,7 +2,7 @@ const WaterSlider = (props) => {
 
         return(
             <div className="form-group" >
-                    <label for="waterName">{props.title}:{props.default}</label>
+                    <label for="waterName" className="sliderTitle">{props.title}:{props.default}</label>
                     <input type="range" 
                         min={props.min} 
                         max={props.max} 

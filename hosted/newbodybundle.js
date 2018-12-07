@@ -78,7 +78,12 @@ var AddBody = function (_React$Component) {
                     { "for": "depth" },
                     "Avg Depth:"
                 ),
-                React.createElement("input", { type: "number", name: "depth", max: "100", min: "0", id: "depth" })
+                React.createElement("input", { type: "number", name: "depth", max: "100", min: "0", id: "depth" }),
+                React.createElement(
+                    "label",
+                    null,
+                    "In feet"
+                )
             );
         }
     }, {
@@ -196,7 +201,7 @@ var AddBody = function (_React$Component) {
                 { className: "container-fluid" },
                 React.createElement(
                     "h2",
-                    { className: "text-center" },
+                    { className: "text-center", id: "title" },
                     "Add a new body of water"
                 ),
                 React.createElement(
@@ -210,7 +215,7 @@ var AddBody = function (_React$Component) {
                     },
                     React.createElement(
                         "div",
-                        { className: "form-group" },
+                        { className: "form-group sliderTitle" },
                         React.createElement(
                             "label",
                             { "for": "type" },
@@ -235,7 +240,7 @@ var AddBody = function (_React$Component) {
                     ),
                     React.createElement(
                         "div",
-                        { className: "form-group" },
+                        { className: "form-group sliderTitle" },
                         React.createElement(
                             "label",
                             { "for": "waterName" },
@@ -245,7 +250,7 @@ var AddBody = function (_React$Component) {
                     ),
                     React.createElement(
                         "div",
-                        { className: "form-group" },
+                        { className: "form-group sliderTitle" },
                         React.createElement(
                             "label",
                             { "for": "zipCode" },
@@ -255,7 +260,7 @@ var AddBody = function (_React$Component) {
                     ),
                     React.createElement(
                         "div",
-                        { className: "form-group" },
+                        { className: "form-group sliderTitle" },
                         React.createElement(
                             "label",
                             { "for": "shape" },
@@ -281,7 +286,7 @@ var AddBody = function (_React$Component) {
                     this.state.shape,
                     React.createElement(
                         "div",
-                        { className: "form-group" },
+                        { className: "form-group sliderTitle" },
                         React.createElement(
                             "label",
                             { "for": "covered" },
@@ -293,7 +298,7 @@ var AddBody = function (_React$Component) {
                     ),
                     React.createElement(
                         "div",
-                        { className: "form-group" },
+                        { className: "form-group sliderTitle" },
                         React.createElement(
                             "label",
                             { "for": "notes" },
@@ -302,7 +307,7 @@ var AddBody = function (_React$Component) {
                         React.createElement("textarea", { className: "form-control", id: "bodyNotes", rows: "3", defaultValue: "" })
                     ),
                     React.createElement("input", { id: "csrfToken", type: "hidden", name: "_csrf", value: this.props.csrf }),
-                    React.createElement("input", { type: "submit", value: 'Add New ' + this.state.water, className: "btn-success btn-block btn" })
+                    React.createElement("input", { type: "submit", value: 'Add New ' + this.state.water, className: "btn-primary btn-block btn" })
                 )
             );
         }

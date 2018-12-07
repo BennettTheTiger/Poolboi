@@ -31,6 +31,7 @@ class AddBody extends React.Component {
                 <input type="number" name="length" max="1000" min="0" id="length"/>
                 <label for="depth">Avg Depth:</label>
                 <input type="number" name="depth" max="100" min="0" id="depth"/>
+                <label>In feet</label>
             </div>
         );
     };
@@ -139,7 +140,7 @@ class AddBody extends React.Component {
     render(){
     return(
         <div className="container-fluid">
-            <h2 className="text-center">Add a new body of water</h2>
+            <h2 className="text-center" id="title">Add a new body of water</h2>
             <form id="waterBody" 
                  onSubmit={this.makeWaterBody}
                  name="waterBodyForm"
@@ -147,22 +148,22 @@ class AddBody extends React.Component {
                  method="POST"
                  className="waterBodyForm"
             >
-            <div className="form-group">
+            <div className="form-group sliderTitle">
                 <label for="type">Water Type:</label>
                     <select className="form-control" id="waterType" onChange={(e) => this.changeType(e)}>
                         <option selected value="true">Pool</option>
                         <option value="false">Spa</option>
                     </select>
             </div>
-            <div className="form-group" >
+            <div className="form-group sliderTitle" >
                 <label for="waterName">Name:</label>
                 <input className="form-control" type="text" id="waterName" defaultValue={this.props.user.username + 's-' + this.state.water}/>
             </div>
-            <div className="form-group" >
+            <div className="form-group sliderTitle" >
                 <label for="zipCode">Water zip code:</label>
                 <input className="form-control" type="number" min="0" max="99999" id="zipCode" defaultValue={this.props.user.zip} />
             </div>
-            <div className="form-group" >
+            <div className="form-group sliderTitle" >
                 <label for="shape">Shape:</label>
                 <select className="form-control" id="type" onChange={(e) => this.changeShape(e)}>
                         <option selected value="circle">Circle</option>
@@ -175,17 +176,17 @@ class AddBody extends React.Component {
             {this.state.shape}
 
                     
-            <div className="form-group">
+            <div className="form-group sliderTitle">
                 <label for="covered">Is the the {this.state.water} exposed to direct sun?</label>
                 <input className="form-control" type="checkbox" name="covered" id="sun" defaultValue="false"/>
             </div>
 
-            <div className="form-group">
+            <div className="form-group sliderTitle">
                 <label for="notes">Notes:</label>
                 <textarea className="form-control" id="bodyNotes" rows="3" defaultValue=""></textarea>
             </div>
             <input id="csrfToken" type="hidden" name="_csrf" value={this.props.csrf}></input>
-            <input type="submit" value={'Add New ' + this.state.water} className="btn-success btn-block btn"></input>
+            <input type="submit" value={'Add New ' + this.state.water} className="btn-primary btn-block btn"></input>
             </form>
         </div>
     );  

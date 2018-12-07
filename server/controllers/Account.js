@@ -22,16 +22,16 @@ const login = (request, response) => {
   const password = `${req.body.pass}`;
   // make sure there is a username and password to auth with
   if (!username || !password) {
-    return res.status(400).json({ error: 'Opps all fields are required' });
+    return res.status(200).json({ error: 'Opps all fields are required' });// really a 401
   }
   // try to authenticate the user
   return Account.AccountModel.authenticate(username, password, (err, account) => {
     if (err || !account) {
-      return res.status(401).json({ error: 'wrong username or password' });
+      return res.status(200).json({ error: 'wrong username or password' });// really a 401
     }
     req.session.account = Account.AccountModel.toAPI(account);
-    console.log('successfully loged in');
-    return res.redirect('/dashboard');
+    // console.log('successfully loged in');
+    return res.status(200).json({ success: '/dashboard' });
   });
 };
 // signup a new user
@@ -39,13 +39,13 @@ const signup = (request, response) => {
   const req = request;
   const res = response;
 
-  console.dir(req.body);
+  // console.dir(req.body);
     // case to strings for security reasons
   req.body.username = `${req.body.username}`;
   req.body.pass = `${req.body.pass}`;
   req.body.pass2 = `${req.body.pass2}`;
 
-  console.log(`signing up user ${req.body.username} with password ${req.body.pass}`);
+  // console.log(`signing up user ${req.body.username} with password ${req.body.pass}`);
 
     // make sure all fields have content
   if (!req.body.username || !req.body.pass || !req.body.pass2) {
@@ -66,17 +66,17 @@ const signup = (request, response) => {
 
     // check if the extra fields have a value if they do add them to accountData
     if (req.body.firstName) {
-      console.log(`first name as ${req.body.firstName}`);
+      // console.log(`first name as ${req.body.firstName}`);
       accountData.firstName = req.body.firstName;
     }
 
     if (req.body.lastName) {
-      console.log(`last name as ${req.body.lastName}`);
+      // console.log(`last name as ${req.body.lastName}`);
       accountData.lastName = req.body.lastName;
     }
 
 
-    console.log(`zip as ${req.body.zip}`);
+    // console.log(`zip as ${req.body.zip}`);
     if (zipcode.lookup(req.body.zip) === undefined) {
       return res.json({ redirect: '/badzip' });
     }
@@ -89,7 +89,7 @@ const signup = (request, response) => {
 
     savePromise.then(() => {
       req.session.account = Account.AccountModel.toAPI(newAccount);
-      console.log('made account');
+      // console.log('made account');
       return res.json({ redirect: '/dashboard' });
     });
 

@@ -6,7 +6,7 @@ var DashNav = function DashNav(props) {
         { className: "dashNavContainer nav justify-content-center flex-column flex-sm-row" },
         React.createElement(
             "div",
-            { className: "nav-item nav-link text-primary" },
+            { className: "nav-item nav-link" },
             React.createElement(
                 "span",
                 { onClick: function onClick() {
@@ -17,7 +17,7 @@ var DashNav = function DashNav(props) {
         ),
         React.createElement(
             "div",
-            { className: "nav-item nav-link text-primary" },
+            { className: "nav-item nav-link" },
             React.createElement(
                 "span",
                 { onClick: function onClick() {
@@ -28,7 +28,7 @@ var DashNav = function DashNav(props) {
         ),
         React.createElement(
             "div",
-            { className: "nav-item nav-link text-primary" },
+            { className: "nav-item nav-link" },
             React.createElement(
                 "span",
                 { onClick: function onClick() {
@@ -58,12 +58,6 @@ var DashNav = function DashNav(props) {
         ),
         React.createElement("hr", null)
     );
-};
-
-var getToken = function getToken() {
-    sendAjax('GET', '/getToken', null, function (result) {
-        createDashNav(result.csrfToken);
-    });
 };
 'use strict';
 
@@ -133,43 +127,49 @@ var Graph = function (_React$Component) {
             new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: data.dates,
+                    labels: data.dates.reverse(), //puts data in order from left to right
                     datasets: [{
                         label: 'Alkalinity',
                         fill: false,
-                        data: data.alkalinity,
-                        borderColor: "Purple",
+                        data: data.alkalinity.reverse(),
+                        borderColor: "#7F0F7E",
+                        backgroundColor: "#7F0F7E",
                         yAxisID: 'A'
                     }, {
                         label: 'cAcid',
                         fill: false,
-                        data: data.cAcid,
+                        data: data.cAcid.reverse(),
                         borderColor: '#023f7c',
+                        backgroundColor: '#023f7c',
                         yAxisID: 'A'
                     }, {
                         label: 'Free Chlorine',
                         fill: false,
-                        data: data.freeChlorine,
+                        data: data.freeChlorine.reverse(),
                         borderColor: '#83d4ea',
+                        backgroundColor: '#83d4ea',
                         yAxisID: 'B'
                     }, {
                         label: 'Chlorine',
                         fill: false,
-                        data: data.chlorine,
-                        borderColor: 'Blue',
+                        data: data.chlorine.reverse(),
+                        borderColor: '#3385ff',
+                        backgroundColor: '#3385ff',
                         yAxisID: 'B'
                     }, {
                         yAxisID: 'B',
                         label: 'PH',
                         fill: false,
-                        data: data.ph,
-                        borderColor: '#e98338'
+                        data: data.ph.reverse(),
+                        borderColor: '#e98338',
+                        backgroundColor: '#e98338'
 
                     }, {
                         label: 'Hardness',
                         fill: false,
-                        data: data.hardness,
+                        data: data.hardness.reverse(),
                         borderColor: 'tan',
+                        backgroundColor: 'tan',
                         yAxisID: 'A'
                     }]
                 },
@@ -190,7 +190,12 @@ var Graph = function (_React$Component) {
                                 max: 10,
                                 min: 0
                             }
-                        }]
+                        }],
+                        xAxes: {
+                            ticks: {
+                                reversed: true
+                            }
+                        }
                     },
                     elements: {
                         line: {
@@ -200,7 +205,9 @@ var Graph = function (_React$Component) {
                     title: {
                         display: true,
                         text: this.props.body.name,
-                        fontSize: 35
+                        fontSize: 40,
+                        fontFamily: 'Maven Pro',
+                        fontColor: '#023f7c'
                     }
                 }
             });
@@ -263,13 +270,9 @@ var AccountView = function AccountView(props) {
             React.createElement(
                 'p',
                 null,
-                'Account Id: ',
+                'Account Api-Id: ',
                 props.account._id
-            )
-        ),
-        React.createElement(
-            'div',
-            { className: 'col-sm-6' },
+            ),
             React.createElement(
                 'p',
                 null,
@@ -281,16 +284,14 @@ var AccountView = function AccountView(props) {
                 null,
                 'Last Sign in:',
                 readableDate(props.account.lastSignedIn)
-            ),
+            )
+        ),
+        React.createElement(
+            'div',
+            { className: 'col-sm-6' },
             React.createElement(
                 'button',
-                { onClick: updateZip, disabled: true, className: 'btn btn-warning disabled' },
-                'Change Zip'
-            ),
-            React.createElement('br', null),
-            React.createElement(
-                'button',
-                { onClick: updatePassword, className: 'btn btn-warning' },
+                { onClick: updatePassword, className: 'btn btn-warning accountBtn' },
                 'Change Password'
             )
         )
@@ -382,39 +383,40 @@ var getAccount = function getAccount() {
 window.onload = function () {
   getAccount();
 };
-'use strict';
+"use strict";
 
 var MainView = function MainView(props) {
     var uvWarning = void 0; //Warn the user if the UV index is above 5
     if (props.weather.currently.uvIndex > 5) uvWarning = 'Better wear some sunscreen!';
     return React.createElement(
-        'div',
+        "div",
         null,
         React.createElement(
-            'p',
+            "p",
             null,
-            'The current temperature is ',
+            "The current temperature is ",
             props.weather.currently.temperature
         ),
         React.createElement(
-            'p',
+            "p",
             null,
-            'Feels like ',
+            "Feels like ",
             props.weather.currently.apparentTemperature
         ),
         React.createElement(
-            'p',
+            "p",
             null,
-            'The current UV index is ',
+            "The current UV index is ",
             props.weather.currently.uvIndex,
-            '. ',
+            ". ",
             uvWarning
         ),
 
         //Dynamically build a graph for each body of water
         props.bodies.map(function (bod) {
             return React.createElement(Graph, { body: bod });
-        })
+        }),
+        React.createElement("link", { rel: "stylesheet", type: "text/css", href: "/assets/styles/overview.css" })
     );
 };
 "use strict";
@@ -432,7 +434,7 @@ var WaterBodyView = function WaterBodyView(props) {
     var delteBody = function delteBody() {
         var remove = window.confirm('Are you sure you want to delete ' + props.body.name + ' \nThis will also delete all water samples for ' + props.body.name);
         if (remove) {
-            console.log('delete water body id and all samples where bodyId is this one');
+            console.log('deleted water body id and all samples for ' + props.body.name);
         }
     };
 
@@ -464,12 +466,6 @@ var WaterBodyView = function WaterBodyView(props) {
             'p',
             null,
             'Water Health:'
-        ),
-        React.createElement(
-            'p',
-            { className: 'small' },
-            'ID:',
-            props.body._id
         ),
         React.createElement('hr', null)
     );
@@ -531,103 +527,117 @@ const WaterGraph = (props) =>{
 "use strict";
 
 var WaterTestView = function WaterTestView(props) {
-
     return React.createElement(
-        "table",
-        { className: "table table-striped table-responsive" },
+        "div",
+        null,
         React.createElement(
             "h3",
-            null,
+            { className: "tableTitle" },
             props.bodyName
         ),
         React.createElement(
-            "thead",
-            { style: { width: '100%' } },
+            "a",
+            { "data-toggle": "collapse", "aria-expanded": "false", "aria-controls": props.bodyName, "data-target": '#' + props.bodyName, role: "button" },
+            React.createElement("i", { id: 'icon' + props.bodyName, className: "eyeCon fas fa-eye-slash", onClick: function onClick() {
+                    $('#icon' + props.bodyName).toggleClass('fa-eye-slash fa-eye');
+                } })
+        ),
+        React.createElement("hr", null),
+        React.createElement(
+            "div",
+            { className: "collapse", id: props.bodyName },
             React.createElement(
-                "tr",
-                null,
+                "table",
+                { className: "table table-striped" },
                 React.createElement(
-                    "th",
-                    { scope: "col-xs-3" },
-                    "Date"
+                    "thead",
+                    { style: { width: '100%' } },
+                    React.createElement(
+                        "tr",
+                        null,
+                        React.createElement(
+                            "th",
+                            { className: "col-xs-3" },
+                            "Date"
+                        ),
+                        React.createElement(
+                            "th",
+                            { className: "col-xs-2" },
+                            "Alkalinity"
+                        ),
+                        React.createElement(
+                            "th",
+                            { className: "col-xs-1" },
+                            "cAcid"
+                        ),
+                        React.createElement(
+                            "th",
+                            { className: "col-xs-2" },
+                            "Chlorine"
+                        ),
+                        React.createElement(
+                            "th",
+                            { className: "col-xs-2" },
+                            "Free Chlorine"
+                        ),
+                        React.createElement(
+                            "th",
+                            { className: "col-xs-1" },
+                            "Hardness"
+                        ),
+                        React.createElement(
+                            "th",
+                            { className: "col-xs-1" },
+                            "PH"
+                        )
+                    )
                 ),
                 React.createElement(
-                    "th",
-                    { scope: "col-xs-2" },
-                    "Alkalinity"
-                ),
-                React.createElement(
-                    "th",
-                    { scope: "col-xs-1" },
-                    "cAcid"
-                ),
-                React.createElement(
-                    "th",
-                    { scope: "col-xs-2" },
-                    "Chlorine"
-                ),
-                React.createElement(
-                    "th",
-                    { scope: "col-xs-2" },
-                    "Free Chlorine"
-                ),
-                React.createElement(
-                    "th",
-                    { scope: "col-xs-1" },
-                    "Hardness"
-                ),
-                React.createElement(
-                    "th",
-                    { scope: "col-xs-1" },
-                    "PH"
+                    "tbody",
+                    { className: "tableBody" },
+                    props.sample.map(function (sam) {
+                        return React.createElement(
+                            "tr",
+                            null,
+                            React.createElement(
+                                "td",
+                                { className: "col-xs-3" },
+                                readableDate(sam.date)
+                            ),
+                            React.createElement(
+                                "td",
+                                { className: "col-xs-2" },
+                                sam.alkalinity
+                            ),
+                            React.createElement(
+                                "td",
+                                { className: "col-xs-1" },
+                                sam.cAcid
+                            ),
+                            React.createElement(
+                                "td",
+                                { className: "col-xs-2" },
+                                sam.chlorine
+                            ),
+                            React.createElement(
+                                "td",
+                                { className: "col-xs-2" },
+                                sam.freeChlorine
+                            ),
+                            React.createElement(
+                                "td",
+                                { className: "col-xs-1" },
+                                sam.hardness
+                            ),
+                            React.createElement(
+                                "td",
+                                { className: "col-xs-1" },
+                                sam.ph
+                            )
+                        );
+                    })
                 )
             )
-        ),
-        React.createElement(
-            "tbody",
-            { style: { width: '100%' } },
-            props.sample.map(function (sam) {
-                console.dir(sam);
-                return React.createElement(
-                    "tr",
-                    null,
-                    React.createElement(
-                        "td",
-                        null,
-                        readableDate(sam.date)
-                    ),
-                    React.createElement(
-                        "td",
-                        null,
-                        sam.alkalinity
-                    ),
-                    React.createElement(
-                        "td",
-                        null,
-                        sam.cAcid
-                    ),
-                    React.createElement(
-                        "td",
-                        null,
-                        sam.chlorine
-                    ),
-                    React.createElement(
-                        "td",
-                        null,
-                        sam.freeChlorine
-                    ),
-                    React.createElement(
-                        "td",
-                        null,
-                        sam.hardness
-                    ),
-                    React.createElement(
-                        "td",
-                        null,
-                        sam.ph
-                    )
-                );
-            })
         )
     );
 };
@@ -733,7 +743,22 @@ var WaterView = function (_React$Component) {
                     { className: 'container-fluid' },
                     React.createElement(
                         'h2',
-                        { className: 'row' },
+                        { className: 'row waterTitle' },
+                        'Test Results',
+                        React.createElement(
+                            'a',
+                            { href: '/newWaterTest' },
+                            React.createElement(PlusIcon, null)
+                        )
+                    ),
+                    this.state.waterTable
+                ),
+                React.createElement(
+                    'section',
+                    { className: 'container-fluid' },
+                    React.createElement(
+                        'h2',
+                        { className: 'row  waterTitle' },
                         'My Water',
                         React.createElement(
                             'a',
@@ -746,21 +771,6 @@ var WaterView = function (_React$Component) {
                         { className: 'row' },
                         this.state.allBodies
                     )
-                ),
-                React.createElement(
-                    'section',
-                    { className: 'container-fluid' },
-                    React.createElement(
-                        'h2',
-                        { className: 'row' },
-                        'Test Results',
-                        React.createElement(
-                            'a',
-                            { href: '/newWaterTest' },
-                            React.createElement(PlusIcon, null)
-                        )
-                    ),
-                    this.state.waterTable
                 )
             );
         }

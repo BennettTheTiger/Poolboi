@@ -113,8 +113,11 @@ AccountSchema.statics.updatePassword = (id, data, callback) => {
 };
 
 AccountSchema.statics.updateSignIn = (id) => {
-  console.log('updating sign in date');
-  AccountModel.updateOne({ _id: id }, { $set: { lastSignedIn: new Date() } });
+  AccountModel.updateOne({ _id: id }, { $set: { lastSignedIn: new Date() } }, (err) => {
+    if (err) {
+      console.log('Something wrong when updating lastSignedIn Date!');
+    }
+  });
 };
 
 AccountModel = mongoose.model('Account', AccountSchema);

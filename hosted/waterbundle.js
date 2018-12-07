@@ -79,7 +79,7 @@ var AddBody = function (_React$Component) {
                 { className: 'container-fluid', style: { padding: '20px', position: 'relative' } },
                 React.createElement(
                     'h2',
-                    { className: 'text-center' },
+                    { className: 'text-center', id: 'title' },
                     'Add Water Test Results'
                 ),
                 React.createElement(
@@ -87,7 +87,7 @@ var AddBody = function (_React$Component) {
                     { id: 'waterResult' },
                     React.createElement(
                         'div',
-                        { className: 'form-group' },
+                        { className: 'form-group sliderTitle' },
                         React.createElement(
                             'label',
                             { 'for': 'type' },
@@ -108,7 +108,7 @@ var AddBody = function (_React$Component) {
                     React.createElement('input', { id: 'csrfToken', type: 'hidden', name: '_csrf', value: this.props.csrf }),
                     React.createElement(
                         'div',
-                        { className: 'form-group' },
+                        { className: 'form-group sliderTitle' },
                         React.createElement(
                             'label',
                             { 'for': 'notes' },
@@ -123,7 +123,7 @@ var AddBody = function (_React$Component) {
                     ),
                     React.createElement(
                         'button',
-                        { onClick: this.SubmitData, className: 'float-right btn-success btn' },
+                        { onClick: this.SubmitData, className: 'float-right btn-primary btn' },
                         'Save Test Results'
                     )
                 )
@@ -164,7 +164,7 @@ var WaterSlider = function WaterSlider(props) {
         { className: "form-group" },
         React.createElement(
             "label",
-            { "for": "waterName" },
+            { "for": "waterName", className: "sliderTitle" },
             props.title,
             ":",
             props.default

@@ -1,0 +1,21 @@
+.blurb{
+   
+    color: #023f7c;
+}
+
+h3{
+    color:#e98338;
+    font-family: 'Maven Pro', sans-serif;
+}
+
+.fa-home{
+    font-size: 2em;
+    color:#e98338;
+    top:20px;
+    position: relative;
+}
+
+.fa-home:hover{
+    color: #023f7c; 
+    transition: ease-in-out .4s
+}

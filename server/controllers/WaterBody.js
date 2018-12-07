@@ -14,7 +14,7 @@ const makeBody = (req, res) => {
     zipCode: data.zip,
     isPool: data.isPool,
     inSun: data.inSun,
-    name: data.name,
+    name: data.name.charAt(0).toUpperCase() + data.name.slice(1),
     notes: data.notes,
   };
   const newBody = new WaterBody.WaterBodyModel(dataStaging);

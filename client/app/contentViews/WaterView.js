@@ -59,15 +59,16 @@ class WaterView extends React.Component{
     return(
         <div>
             <section className="container-fluid">
-                <h2 className="row">My Water<a href="/newWaterBody"><PlusIcon/></a></h2>
+                <h2 className="row waterTitle">Test Results<a href="/newWaterTest"><PlusIcon/></a></h2>
+                {this.state.waterTable}     
+            </section>
+            <section className="container-fluid">
+                <h2 className="row  waterTitle">My Water<a href="/newWaterBody"><PlusIcon/></a></h2>
                 <div className="row"> 
                    {this.state.allBodies}  
                 </div>
             </section>
-            <section className="container-fluid">
-                <h2 className="row">Test Results<a href="/newWaterTest"><PlusIcon/></a></h2>
-                {this.state.waterTable}     
-            </section>
+            
         </div>
     );
     }
