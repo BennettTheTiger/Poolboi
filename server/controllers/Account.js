@@ -115,7 +115,7 @@ const updatePassword = (req, res) => {
         console.log(err);
         res.status(500).json({ msg: 'Unable to change your password' });
       }
-      res.status(200).json({ redirect: '/error' });
+      res.status(200).json({ msg: 'New Password Set' });
     });
   });
 };

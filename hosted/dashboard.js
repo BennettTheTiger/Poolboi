@@ -430,46 +430,104 @@ var PlusIcon = function PlusIcon(props) {
 };
 'use strict';
 
-var WaterBodyView = function WaterBodyView(props) {
-    var delteBody = function delteBody() {
-        var remove = window.confirm('Are you sure you want to delete ' + props.body.name + ' \nThis will also delete all water samples for ' + props.body.name);
-        if (remove) {
-            console.log('deleted water body id and all samples for ' + props.body.name);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var WaterBodyView = function (_React$Component) {
+    _inherits(WaterBodyView, _React$Component);
+
+    function WaterBodyView(props) {
+        _classCallCheck(this, WaterBodyView);
+
+        var _this = _possibleConstructorReturn(this, (WaterBodyView.__proto__ || Object.getPrototypeOf(WaterBodyView)).call(this, props));
+
+        _this.state = {
+            health: 'Unknown',
+            type: 'Pool',
+            notes: 'None',
+            score: 'No Score'
+        };
+        return _this;
+    }
+
+    _createClass(WaterBodyView, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            if (!this.props.body.isPool) this.setState({ type: 'Spa' });
+            this.getHealth();
         }
-    };
+    }, {
+        key: 'delteBody',
+        value: function delteBody() {
+            var remove = window.confirm('Are you sure you want to delete ' + props.body.name + ' \nThis will also delete all water samples for ' + props.body.name);
+            if (remove) {
+                console.log('deleted water body id and all samples for ' + props.body.name);
+            }
+        }
+    }, {
+        key: 'getHealth',
+        value: function getHealth() {
+            var _this2 = this;
 
-    var type = 'Pool';
-    if (!props.body.isPool) type = 'Spa';
+            sendAjax('GET', '/healthCheck', { bodyID: this.props.body._id }, function (success) {
+                //console.dir(success);
+                _this2.setState({ health: success.health, notes: success.notes, score: success.score });
+            });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return React.createElement(
+                'div',
+                { className: 'col-sm-6' },
+                React.createElement(
+                    'p',
+                    null,
+                    'Name:',
+                    this.props.body.name
+                ),
+                React.createElement(
+                    'p',
+                    null,
+                    'Location:',
+                    this.props.body.zipCode
+                ),
+                React.createElement(
+                    'p',
+                    null,
+                    'Type:',
+                    this.state.type
+                ),
+                React.createElement(
+                    'p',
+                    null,
+                    'Water Health:',
+                    this.state.health
+                ),
+                React.createElement(
+                    'p',
+                    null,
+                    'Water Score:',
+                    this.state.score
+                ),
+                React.createElement(
+                    'p',
+                    null,
+                    'Notes:',
+                    this.state.notes
+                ),
+                React.createElement('hr', null)
+            );
+        }
+    }]);
 
-    return React.createElement(
-        'div',
-        { className: 'col-sm-6' },
-        React.createElement(
-            'p',
-            null,
-            'Name:',
-            props.body.name
-        ),
-        React.createElement(
-            'p',
-            null,
-            'Location:',
-            props.body.zipCode
-        ),
-        React.createElement(
-            'p',
-            null,
-            'Type:',
-            type
-        ),
-        React.createElement(
-            'p',
-            null,
-            'Water Health:'
-        ),
-        React.createElement('hr', null)
-    );
-};
+    return WaterBodyView;
+}(React.Component);
 
 /*
 

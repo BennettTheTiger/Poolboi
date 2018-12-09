@@ -33,9 +33,12 @@ const router = (app) => {
   (req, res) => { res.render('addWater'); });
   app.post('/addWater', mid.requiresLogin, mid.requiresSecure, controllers.WaterSample.makeSample);
   app.get('/addWater', mid.requiresLogin, mid.requiresSecure, controllers.WaterSample.getSamples);
+  // water health check
+  app.get('/healthCheck', mid.requiresLogin, mid.requiresSecure, controllers.Analysis.evaluate);
   // error handling
   app.get('/error', (req, res) => { res.render('error', { msg: req.body }); });
   app.get('/badzip', (req, res) => { res.render('error', { msg: 'Failed - Invalid Zip Code' }); });
+  app.get('/newPassword', (req, res) => { res.render('error', { msg: 'New Password Set' }); });
   app.get('*',
   (req, res) => { res.render('error', { msg: 'The page you are looking was not found' }); });
 };

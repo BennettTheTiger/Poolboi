@@ -2,6 +2,9 @@
     "extends": "airbnb/base",
     "rules": {
       "no-underscore-dangle" : "off",
-      "no-plusplus": "off"
+      "no-plusplus": "off",
+      "consistent-return":"off",
+      "no-param-reassign":"off",//Used to add to the request session object
+      "array-callback-return":"off", //error on waterAnalysis.js 21:34
     }
 }

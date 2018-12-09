@@ -1,7 +1,6 @@
 const Sample = require('./WaterSample');
-const Body = require('./WaterBody');
 
-// - Desired water results object -
+// - Desired water results object with min and max -
 const desired = {
   ph: [7.2, 7.6],
   alkalinity: [80, 120],
@@ -10,35 +9,38 @@ const desired = {
   freeChlorine: [1, 3],
   cAcid: [30, 50],
 };
-
-const test = {
-  ph: 7.4,
-  alkalinity: 71,
-  hardness: 190,
-  chlorine: 0,
-  freeChlorine: 4,
-  cAcid: 43,
-};
+// globals
+let notes = '';
+let health = 'Good';
+let score = 100;
 // Evaluate the state of the water and offer advice
-/*
-    1) Get a water body ID and check the most recent sample
-    2) If there no sample is found then notify and quit
-    3) Check the date of the samle if its more than 3 days old factor in recent weather
-    4) Check how far its levels deviate from desired water
-    5) Create a water treatment plan and return this data
-*/
-
+const check = (sample, res) => {
+  notes = '';
+  score = 100;
+  const lastSample = sample.pop();
+  Object.keys(desired).map((key) => {
+    if (lastSample[key] < desired[key][0]) {
+      notes += (` Low ${key} `);
+      score -= 5;
+    }
+    if (lastSample[key] > desired[key][1]) {
+      notes += (` High ${key} `);
+      score -= 5;
+    }
+  });
+  // make a tip msg
+  if (score >= 55) health = 'Yikes looks like you need to add some chemicals!';
+  if (score >= 75) health = 'A few tweaks and you can get that water back to good health!';
+  if (score >= 95) health = 'Water is in good condition!';
+  return res.status(200).json({ health, notes, score });
+};
+// query out the last water sample for a water body
 const evaluate = (req, res) => {
-  console.dir(desired);
-  for (const key of Object.keys(desired)) {
-    console.log(key, test[key]);
-  }
+  Sample.findRecent(req.query.bodyID, (data) => {
+    if (data.length === 0) return res.status(200);
+    check(data, res);
+  });
 };
 
 // looks at how far off the actual value is from the desired value
-const analyiseField = (desired, actual) => {
-
-};
-
-
 module.exports.evaluate = evaluate;

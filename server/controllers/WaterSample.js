@@ -38,13 +38,13 @@ const makeSample = (req, res) => {
 
 // request water samples from a water body id
 const getSamples = (req, res) => {
-  console.dir(req.query);
+  // console.dir(req.query);
   models.WaterSample.WaterSampleModel.findByBody(req.query, (err, results) => {
     if (err) {
       console.log(err);
       res.status(500).json({ err });
     }
-    console.log(results);
+    // console.log(results);
     res.status(200).json(results);
   });// end of find samples
 };
@@ -66,6 +66,17 @@ const removeSample = (request, response) => {
   });
 };
 
+const findRecent = (bodyID, callback) => {
+  models.WaterSample.WaterSampleModel.findOne(bodyID, (err, results) => {
+    if (err) {
+      console.log(err);
+    }
+    // console.log(results);
+    callback(results);
+  });// end of find samples
+};
+
 module.exports.removeSample = removeSample;
 module.exports.getSamples = getSamples;
 module.exports.makeSample = makeSample;
+module.exports.findRecent = findRecent;
